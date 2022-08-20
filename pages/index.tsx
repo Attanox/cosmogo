@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import { useCart } from "lib/cart.client";
+import Cart from "components/Cart";
 import type { GetStaticProps, NextPage } from "next";
+import Link from "next/link";
 
 type Launch = {
   details: string;
@@ -27,16 +28,25 @@ interface LocalProps {
 
 const Home: NextPage<LocalProps> = (props) => {
   const { launches } = props;
-  const cart = useCart();
 
   return (
     <div className="w-1/2 mx-auto py-8 flex flex-col gap-4">
+      <div className="py-2 w-full flex items-center">
+        <Link href={"/"}>Cosmogo</Link>
+
+        <div className="ml-auto">
+          <Cart />
+        </div>
+      </div>
       {launches.map((l) => {
         const launchDate = new Date(l.launch_date_local);
         const launchDay = `${launchDate.getMonth()}/${launchDate.getDay()}/${launchDate.getFullYear()}`;
 
         return (
-          <div key={l.id} className="card w-full bg-base-100 shadow-xl">
+          <div
+            key={l.id}
+            className="card w-full bg-primary text-white shadow-xl"
+          >
             <div className="card-body">
               <h2 className="card-title">{l.mission_name}</h2>
               <p>{l.details}</p>
