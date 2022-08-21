@@ -1,63 +1,35 @@
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import Cart from "components/Cart";
+import LaunchDetail from "components/LaunchDetail";
 import type { GetStaticProps, NextPage } from "next";
 import Link from "next/link";
-
-type Launch = {
-  details: string;
-  id: string;
-  mission_name: string;
-  rocket: {
-    rocket_name: string;
-    rocket_type: string;
-  };
-  launch_date_local: string;
-  launch_site: {
-    site_name_long: string;
-  };
-  links: {
-    article_link: string;
-    video_link: string;
-    mission_patch: string;
-  };
-};
+import { Dragon, Launch } from "types";
 
 interface LocalProps {
   launches: Launch[];
+  dragons: Dragon[];
 }
 
 const Home: NextPage<LocalProps> = (props) => {
-  const { launches } = props;
+  const { launches, dragons } = props;
 
   return (
-    <div className="w-1/2 mx-auto py-8 flex flex-col gap-4">
-      <div className="py-2 w-full flex items-center">
-        <Link href={"/"}>Cosmogo</Link>
-
-        <div className="ml-auto">
+    <div className="grid grid-cols-2 h-screen py-2 gap-4">
+      <div className="max-h-full h-fit w-full p-2 ml-2 grid gap-4 scrollbar overflow-y-auto bg-neutral rounded-lg">
+        {launches.map((l) => (
+          <LaunchDetail
+            key={`${l.id}-${l.mission_name}`}
+            l={l}
+            dragons={dragons}
+          />
+        ))}
+      </div>
+      <div className="w-full max-h-screen pr-2 flex flex-col gap-2">
+        <div className="bg-neutral rounded-lg py-6 px-2 h-full flex-1">
           <Cart />
         </div>
+        <div className="bg-neutral rounded-lg py-6 px-2 h-full flex-1"></div>
       </div>
-      {launches.map((l) => {
-        const launchDate = new Date(l.launch_date_local);
-        const launchDay = `${launchDate.getMonth()}/${launchDate.getDay()}/${launchDate.getFullYear()}`;
-
-        return (
-          <div
-            key={l.id}
-            className="card w-full bg-primary text-white shadow-xl"
-          >
-            <div className="card-body">
-              <h2 className="card-title">{l.mission_name}</h2>
-              <p>{l.details}</p>
-              <div>
-                Launching on: <b>{launchDay}</b> in{" "}
-                <b>{l.launch_site.site_name_long}</b>
-              </div>
-            </div>
-          </div>
-        );
-      })}
     </div>
   );
 };
@@ -68,18 +40,16 @@ export const getStaticProps: GetStaticProps<LocalProps> = async () => {
     cache: new InMemoryCache(),
   });
 
-  const { data } = await client.query({
+  const { data } = await client.query<{
+    launches: Launch[];
+    dragons: Dragon[];
+  }>({
     query: gql`
       query GetLaunches {
-        launchNext {
+        launches(limit: 10) {
           details
           id
           mission_name
-          rocket {
-            rocket_name
-            rocket_type
-          }
-          launch_date_local
           launch_site {
             site_name_long
           }
@@ -88,13 +58,20 @@ export const getStaticProps: GetStaticProps<LocalProps> = async () => {
             mission_patch
           }
         }
+        dragons {
+          crew_capacity
+          description
+          name
+          id
+        }
       }
     `,
   });
 
   return {
     props: {
-      launches: [data.launchNext],
+      launches: data.launches,
+      dragons: data.dragons.filter((d) => !!d.crew_capacity),
     },
   };
 };
