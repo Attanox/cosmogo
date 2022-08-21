@@ -1,8 +1,8 @@
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import Cart from "components/Cart";
+import { Customizer } from "components/Customizer";
 import LaunchDetail from "components/LaunchDetail";
-import type { GetStaticProps, NextPage } from "next";
-import Link from "next/link";
+import type { GetServerSideProps, NextPage } from "next";
 import { Dragon, Launch } from "types";
 
 interface LocalProps {
@@ -28,13 +28,21 @@ const Home: NextPage<LocalProps> = (props) => {
         <div className="bg-neutral rounded-lg py-6 px-2 h-full flex-1">
           <Cart />
         </div>
-        <div className="bg-neutral rounded-lg py-6 px-2 h-full flex-1"></div>
+        <div className="bg-neutral rounded-lg py-6 px-2 h-full flex-1">
+          <Customizer
+            onChange={(current, color) => console.log({ current, color })}
+            initialColors={{
+              Suit_Base: "#ffffff",
+              Suit_Details: "#ffffff",
+            }}
+          />
+        </div>
       </div>
     </div>
   );
 };
 
-export const getStaticProps: GetStaticProps<LocalProps> = async () => {
+export const getServerSideProps: GetServerSideProps<LocalProps> = async () => {
   const client = new ApolloClient({
     uri: "https://api.spacex.land/graphql/",
     cache: new InMemoryCache(),
