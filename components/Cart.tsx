@@ -5,6 +5,7 @@ import {
   useGetCartQuery,
   useRemoveFromCartMutation,
   useUpdateCartMutation,
+  useDeleteCartMutation,
 } from "types";
 import { useCartId } from "hooks/cart.hooks";
 import { debounce } from "ts-debounce";
@@ -138,6 +139,46 @@ const SeatsCounter = (props: {
   );
 };
 
+const FinishOrder = (props: { cartId: string }) => {
+  const { cartId } = props;
+
+  const [deleteCart, { loading: deletingCart }] = useDeleteCartMutation({
+    refetchQueries: [GetCartDocument],
+  });
+
+  return (
+    <button
+      disabled={deletingCart}
+      onClick={() => {
+        deleteCart({
+          variables: {
+            input: {
+              id: cartId,
+            },
+          },
+        });
+      }}
+      style={{ width: "fit-content" }}
+      className="btn btn-accent"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-9 w-9"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={2}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+        />
+      </svg>
+    </button>
+  );
+};
+
 const Cart = (props: { dragons: Dragon[] }) => {
   const { cartId } = useCartId();
 
@@ -158,23 +199,8 @@ const Cart = (props: { dragons: Dragon[] }) => {
           items)
         </span>
 
-        <div className="ml-auto" data-tip="Buy!">
-          <button style={{ width: "fit-content" }} className="btn btn-accent">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-9 w-9"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-              />
-            </svg>
-          </button>
+        <div className="ml-auto">
+          <FinishOrder cartId={cartId} />
         </div>
       </div>
       <div className="overflow-x-auto h-96 scrollbar">
