@@ -1,6 +1,99 @@
 import React from "react";
-import { useGetCartQuery } from "types";
+import {
+  GetCartDocument,
+  useGetCartQuery,
+  useRemoveFromCartMutation,
+  useUpdateCartMutation,
+} from "types";
 import { useCartId } from "hooks/cart.hooks";
+import { debounce } from "ts-debounce";
+
+const RemoveCartItem = (props: { cartId: string; itemId: string }) => {
+  const { cartId, itemId } = props;
+
+  const [removeFromCart, { loading: removingFromCart }] =
+    useRemoveFromCartMutation({
+      refetchQueries: [GetCartDocument],
+    });
+
+  return (
+    <div className="flex items-center justify-end">
+      <button
+        onClick={() =>
+          removeFromCart({
+            variables: { input: { id: itemId, cartId } },
+          })
+        }
+        disabled={removingFromCart}
+        className="btn btn-sm btn-outline btn-circle btn-error"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+  );
+};
+
+const SeatsCounter = (props: {
+  max: number;
+  cartId: string;
+  itemId: string;
+}) => {
+  const { max, cartId, itemId } = props;
+
+  const [updateCartItem, { loading: updatingCart }] = useUpdateCartMutation({
+    refetchQueries: [GetCartDocument],
+  });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const onChange = React.useCallback(
+    debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+      const seats = e.target.valueAsNumber;
+      updateCartItem({
+        variables: {
+          input: {
+            cartId,
+            id: itemId,
+            quantity: seats,
+          },
+        },
+      });
+    }, 500),
+    []
+  );
+
+  return (
+    <>
+      <input
+        type="range"
+        min={1}
+        max={max}
+        defaultValue={1}
+        className="range range-xs range-accent"
+        step={1}
+        onChange={onChange}
+        disabled={updatingCart}
+      />
+      <div className="w-full flex justify-between text-xs px-2">
+        {[...Array(max)].map((_, idx) => {
+          return <span key={idx}>{idx + 1}</span>;
+        })}
+      </div>
+    </>
+  );
+};
 
 const Cart = () => {
   const { cartId } = useCartId();
@@ -9,6 +102,8 @@ const Cart = () => {
     variables: { id: cartId || "" },
     skip: !cartId,
   });
+
+  console.log({ items: cartData?.cart?.items });
 
   if (!cartId || loading) return <div>Loading...</div>;
 
@@ -60,26 +155,11 @@ const Cart = () => {
                 <tr key={item.id}>
                   <th>{idx}</th>
                   <td>{item.name}</td>
-                  <td>1</td>
                   <td>
-                    <div className="flex items-center justify-end">
-                      <button className="btn btn-sm btn-outline btn-circle btn-error">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
-                    </div>
+                    <SeatsCounter itemId={item.id} cartId={cartId} max={7} />
+                  </td>
+                  <td>
+                    <RemoveCartItem itemId={item.id} cartId={cartId} />
                   </td>
                 </tr>
               );

@@ -29,7 +29,6 @@ const resolvers: Resolvers = {
           },
         },
       });
-      console.log({ cart, cartItem });
       return cart;
     },
     removeItem: async (_, { input }, { prisma }) => {
@@ -47,6 +46,19 @@ const resolvers: Resolvers = {
           quantity: {
             increment: 1,
           },
+        },
+        where: { id_cartId: { id: input.id, cartId: input.cartId } },
+        select: {
+          quantity: true,
+          cartId: true,
+        },
+      });
+      return findOrCreateCart(prisma, cartId);
+    },
+    updateCartItem: async (_, { input }, { prisma }) => {
+      const { cartId, quantity } = await prisma.cartItem.update({
+        data: {
+          quantity: input.quantity,
         },
         where: { id_cartId: { id: input.id, cartId: input.cartId } },
         select: {
@@ -86,11 +98,12 @@ const resolvers: Resolvers = {
   },
   Cart: {
     items: async ({ id }, _, { prisma }) => {
-      const items = await prisma.cart
-        .findUnique({
-          where: { id },
-        })
-        .items();
+      const items = await prisma.cartItem.findMany({
+        where: { cartId: id },
+        orderBy: {
+          createdAt: "asc",
+        },
+      });
 
       return items;
     },

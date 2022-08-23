@@ -1,0 +1,7 @@
+# import Cart from "./CartFragment"
+
+mutation RemoveFromCart($input: RemoveFromCartInput!) {
+  removeItem(input: $input) {
+    ...Cart
+  }
+}
