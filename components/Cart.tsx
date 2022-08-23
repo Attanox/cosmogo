@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Dragon,
   GetCartDocument,
   useGetCartQuery,
   useRemoveFromCartMutation,
@@ -47,18 +48,23 @@ const RemoveCartItem = (props: { cartId: string; itemId: string }) => {
 };
 
 const SeatsCounter = (props: {
-  max: number;
+  dragons: Dragon[];
   cartId: string;
   itemId: string;
 }) => {
-  const { max, cartId, itemId } = props;
+  const { dragons, cartId, itemId } = props;
+
+  const [selectedDragonId, setSelectedDragonId] = React.useState<string>(
+    dragons[0].id
+  );
+  const [seats, setSeats] = React.useState<number>(1);
 
   const [updateCartItem, { loading: updatingCart }] = useUpdateCartMutation({
     refetchQueries: [GetCartDocument],
   });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const onChange = React.useCallback(
+  const onSeatsChange = React.useCallback(
     debounce((e: React.ChangeEvent<HTMLInputElement>) => {
       const seats = e.target.valueAsNumber;
       updateCartItem({
@@ -74,36 +80,71 @@ const SeatsCounter = (props: {
     []
   );
 
+  const onCapsuleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const dragonId = e.target.value;
+    setSelectedDragonId(dragonId);
+    updateCartItem({
+      variables: {
+        input: {
+          cartId,
+          id: itemId,
+          quantity: 1,
+        },
+      },
+    });
+    setSeats(1);
+  };
+
+  const selectedDragonCapacity =
+    dragons.find((d) => d.id === selectedDragonId)?.crew_capacity || 0;
+
   return (
     <>
-      <input
-        type="range"
-        min={1}
-        max={max}
-        defaultValue={1}
-        className="range range-xs range-accent"
-        step={1}
-        onChange={onChange}
-        disabled={updatingCart}
-      />
-      <div className="w-full flex justify-between text-xs px-2">
-        {[...Array(max)].map((_, idx) => {
-          return <span key={idx}>{idx + 1}</span>;
-        })}
-      </div>
+      <td>
+        <select
+          onChange={onCapsuleChange}
+          className="select select-bordered w-full"
+        >
+          {dragons.map((dragon) => {
+            return (
+              <option key={dragon.id} value={dragon.id}>
+                {dragon.name}
+              </option>
+            );
+          })}
+        </select>
+      </td>
+      <td>
+        <input
+          type="range"
+          min={1}
+          max={selectedDragonCapacity}
+          value={seats}
+          className="range range-xs range-accent"
+          step={1}
+          onChange={(e) => {
+            onSeatsChange(e);
+            setSeats(e.target.valueAsNumber);
+          }}
+          disabled={updatingCart}
+        />
+        <div className="w-full flex justify-between text-xs px-2">
+          {[...Array(selectedDragonCapacity)].map((_, idx) => {
+            return <span key={idx}>{idx + 1}</span>;
+          })}
+        </div>
+      </td>
     </>
   );
 };
 
-const Cart = () => {
+const Cart = (props: { dragons: Dragon[] }) => {
   const { cartId } = useCartId();
 
   const { data: cartData, loading } = useGetCartQuery({
     variables: { id: cartId || "" },
     skip: !cartId,
   });
-
-  console.log({ items: cartData?.cart?.items });
 
   if (!cartId || loading) return <div>Loading...</div>;
 
@@ -117,11 +158,8 @@ const Cart = () => {
           items)
         </span>
 
-        <div className="ml-auto">
-          <div
-            style={{ width: "fit-content" }}
-            className="rounded-lg py-2 px-4 bg-primary text-white"
-          >
+        <div className="ml-auto" data-tip="Buy!">
+          <button style={{ width: "fit-content" }} className="btn btn-accent">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-9 w-9"
@@ -136,7 +174,7 @@ const Cart = () => {
                 d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
               />
             </svg>
-          </div>
+          </button>
         </div>
       </div>
       <div className="overflow-x-auto h-96 scrollbar">
@@ -145,7 +183,8 @@ const Cart = () => {
             <tr>
               <th></th>
               <th>Name</th>
-              <th>Seats</th>
+              <th className="text-center">Capsule</th>
+              <th className="text-center">Seats</th>
               <th></th>
             </tr>
           </thead>
@@ -155,9 +194,13 @@ const Cart = () => {
                 <tr key={item.id}>
                   <th>{idx}</th>
                   <td>{item.name}</td>
-                  <td>
-                    <SeatsCounter itemId={item.id} cartId={cartId} max={7} />
-                  </td>
+
+                  <SeatsCounter
+                    dragons={props.dragons}
+                    itemId={item.id}
+                    cartId={cartId}
+                  />
+
                   <td>
                     <RemoveCartItem itemId={item.id} cartId={cartId} />
                   </td>
