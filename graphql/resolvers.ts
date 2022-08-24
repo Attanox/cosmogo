@@ -117,7 +117,10 @@ const resolvers: Resolvers = {
         })
         .items();
 
-      return items.reduce((total, item) => total + item.quantity || 1, 0);
+      return (items || []).reduce(
+        (total, item) => total + item.quantity || 1,
+        0
+      );
     },
     subTotal: async ({ id }, _, { prisma }) => {
       const items = await prisma.cart
@@ -127,7 +130,10 @@ const resolvers: Resolvers = {
         .items();
 
       const amount =
-        items.reduce((acc, item) => acc + item.price * item.quantity, 0) ?? 0;
+        (items || []).reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0
+        ) ?? 0;
 
       return {
         amount,

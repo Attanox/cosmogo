@@ -9,6 +9,7 @@ import {
 } from "types";
 import { useCartId } from "hooks/cart.hooks";
 import { debounce } from "ts-debounce";
+import { removeCookies } from "cookies-next";
 
 const RemoveCartItem = (props: { cartId: string; itemId: string }) => {
   const { cartId, itemId } = props;
@@ -142,9 +143,14 @@ const SeatsCounter = (props: {
 const FinishOrder = (props: { cartId: string }) => {
   const { cartId } = props;
 
+  const [finished, setFinished] = React.useState(false);
+
   const [deleteCart, { loading: deletingCart }] = useDeleteCartMutation({
     refetchQueries: [GetCartDocument],
   });
+
+  if (finished)
+    return <span className="badge badge-accent">Order done 🚀</span>;
 
   return (
     <button
@@ -157,6 +163,9 @@ const FinishOrder = (props: { cartId: string }) => {
             },
           },
         });
+        removeCookies("cartId");
+        setFinished(true);
+        setTimeout(() => setFinished(false), 5000);
       }}
       style={{ width: "fit-content" }}
       className="btn btn-accent"
@@ -192,18 +201,8 @@ const Cart = (props: { dragons: Dragon[] }) => {
   if (!cartData?.cart) return null;
 
   return (
-    <div className="grid">
-      <div className="px-2 pb-2 w-full flex items-center">
-        <span>
-          Total: {cartData.cart.subTotal.formatted} ({cartData.cart.totalItems}{" "}
-          items)
-        </span>
-
-        <div className="ml-auto">
-          <FinishOrder cartId={cartId} />
-        </div>
-      </div>
-      <div className="overflow-x-auto h-96 scrollbar">
+    <div className="flex flex-col h-full py-2 gap-2">
+      <div className="overflow-x-auto max-h-96 flex-grow scrollbar">
         <table className="table w-full">
           <thead>
             <tr>
@@ -235,6 +234,20 @@ const Cart = (props: { dragons: Dragon[] }) => {
             })}
           </tbody>
         </table>
+      </div>
+
+      <div className="mt-auto p-2 w-full flex items-center">
+        <span>
+          Total:{" "}
+          <span className="font-bold text-lg">
+            {cartData.cart.subTotal.formatted}
+          </span>{" "}
+          ({cartData.cart.totalItems} items)
+        </span>
+
+        <div className="ml-auto">
+          <FinishOrder cartId={cartId} />
+        </div>
       </div>
     </div>
   );
