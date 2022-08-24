@@ -7,6 +7,7 @@ type Cart {
   totalItems: Int!
   items: [CartItem!]!
   subTotal: Money!
+  suit: Suit!
 }
 
 type Money {
@@ -24,6 +25,12 @@ type CartItem {
   lineTotal: Money!
 }
 
+type Suit {
+  id: ID!
+  baseColor: String!
+  detailsColor: String!
+}
+
 type Mutation {
   addItem(input: AddToCartInput!): Cart
   removeItem(input: RemoveFromCartInput!): Cart
@@ -31,6 +38,7 @@ type Mutation {
   decreaseCartItem(input: DecreaseCartItemInput!): Cart
   updateCartItem(input: UpdateCartItemInput!): Cart
   deleteCart(input: DeleteCartInput!): Cart
+  changeSuit(input: ChangeSuitInput!): Cart
 }
 
 input AddToCartInput {
@@ -65,6 +73,12 @@ input UpdateCartItemInput {
 
 input DeleteCartInput {
   id: ID!
+}
+
+input ChangeSuitInput {
+  cartId: ID!
+  baseColor: String
+  detailsColor: String
 }
 
 type Launch {

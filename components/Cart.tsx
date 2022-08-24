@@ -196,7 +196,8 @@ const Cart = (props: { dragons: Dragon[] }) => {
     skip: !cartId,
   });
 
-  if (!cartId || loading) return <div>Loading...</div>;
+  if (!cartId || loading)
+    return <div className="text-center text-large">Loading...</div>;
 
   if (!cartData?.cart) return null;
 
@@ -236,7 +237,26 @@ const Cart = (props: { dragons: Dragon[] }) => {
         </table>
       </div>
 
-      <div className="mt-auto p-2 w-full flex items-center">
+      <div className="mt-auto p-2 w-full flex items-center justify-center">
+        <div className="flex items-center">
+          <span>Base Color:</span>
+          <div className="w-2" />
+          <div
+            style={{ backgroundColor: cartData.cart.suit.baseColor }}
+            className="w-6 h-6 rounded-md"
+          />
+        </div>
+        <div className="w-5" />
+        <div className="flex">
+          <span>Details Color:</span>
+          <div className="w-2" />
+          <div
+            style={{ backgroundColor: cartData.cart.suit.detailsColor }}
+            className="w-6 h-6 rounded-md"
+          />
+        </div>
+      </div>
+      <div className="p-2 w-full flex items-center">
         <span>
           Total:{" "}
           <span className="font-bold text-lg">

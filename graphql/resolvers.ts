@@ -98,6 +98,30 @@ const resolvers: Resolvers = {
     deleteCart: async (_, { input }, { prisma }) => {
       return await prisma.cart.delete({ where: { id: input.id } });
     },
+    changeSuit: async (_, { input }, { prisma }) => {
+      if (input.baseColor) {
+        await prisma.suit.update({
+          data: {
+            baseColor: input.baseColor,
+          },
+          where: {
+            cartId: input.cartId,
+          },
+        });
+      }
+      if (input.detailsColor) {
+        await prisma.suit.update({
+          data: {
+            detailsColor: input.detailsColor,
+          },
+          where: {
+            cartId: input.cartId,
+          },
+        });
+      }
+
+      return await prisma.cart.findFirst({ where: { id: input.cartId } });
+    },
   },
   Cart: {
     items: async ({ id }, _, { prisma }) => {
@@ -141,6 +165,19 @@ const resolvers: Resolvers = {
           code: currencyCode,
         }),
       };
+    },
+    suit: async ({ id }, _, { prisma }) => {
+      let suit = await prisma.suit.findFirst({ where: { cartId: id } });
+      if (!suit) {
+        suit = await prisma.suit.create({
+          data: {
+            cartId: id,
+            baseColor: "#ffffff",
+            detailsColor: "#ffffff",
+          },
+        });
+      }
+      return suit;
     },
   },
   CartItem: {

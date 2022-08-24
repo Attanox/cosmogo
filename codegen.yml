@@ -9,6 +9,7 @@ generates:
       mappers:
         Cart: "@prisma/client#Cart"
         CartItem: "@prisma/client#CartItem"
+        Suit: "@prisma/client#Suit"
     plugins:
       - "typescript"
       - "typescript-operations"

@@ -4,6 +4,9 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import ColorPicker from "./ColorPicker";
 import Model from "./Model";
+import { useCartId } from "hooks/cart.hooks";
+import { GetCartDocument, useChangeSuitMutation, useGetCartQuery } from "types";
+import { debounce } from "ts-debounce";
 
 type TGenericObject = { [key: string]: string };
 
@@ -12,17 +15,12 @@ export type TGlobalState = {
   items: TGenericObject;
 };
 
-interface LocalProps {
-  initialColors: TGenericObject;
-  onChange?: (current: string, color: string) => void;
-}
+const INITIAL_STATE: TGlobalState = {
+  current: "",
+  items: {},
+};
 
 const createInitialState = (initItemColors: TGenericObject = {}) => {
-  const INITIAL_STATE: TGlobalState = {
-    current: "",
-    items: {},
-  };
-
   return {
     ...INITIAL_STATE,
     items: {
@@ -31,17 +29,61 @@ const createInitialState = (initItemColors: TGenericObject = {}) => {
   };
 };
 
-export const Customizer = (props: LocalProps) => {
-  const [state, setState] = useState(createInitialState(props.initialColors));
+export const Customizer = () => {
+  const { cartId } = useCartId();
+
+  const [state, setState] = useState<TGlobalState>(INITIAL_STATE);
+
+  const { data: cartData, loading } = useGetCartQuery({
+    variables: { id: cartId || "" },
+    skip: !cartId,
+    onCompleted(data) {
+      const initState = createInitialState({
+        Suit_Base: data?.cart?.suit.baseColor as string,
+        Suit_Details: data?.cart?.suit.detailsColor as string,
+      });
+      setState(initState);
+    },
+  });
+
+  const [changeSuit] = useChangeSuitMutation({
+    refetchQueries: [GetCartDocument],
+  });
 
   const setCurrent = (current: string) => {
     setState({ ...state, current });
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const mutateSuitColor = React.useCallback(
+    debounce((current: string, color: string) => {
+      if (current) {
+        const input: { [key: string]: string } = {};
+        if (current === "Suit_Base") input["baseColor"] = color;
+        if (current === "Suit_Details") input["detailsColor"] = color;
+
+        changeSuit({
+          variables: {
+            input: {
+              cartId,
+              ...input,
+            },
+          },
+        });
+      }
+    }),
+    [cartData?.cart?.id]
+  );
+
   const changeColor = (color: string) => {
     setState({ ...state, items: { ...state.items, [state.current]: color } });
-    props.onChange && state.current && props.onChange(state.current, color);
+    mutateSuitColor(state.current, color);
   };
+
+  if (!cartId || loading)
+    return <div className="text-center text-large">Loading...</div>;
+
+  if (!cartData?.cart) return null;
 
   return (
     <div style={{ height: "500px" }} className="w-full relative">

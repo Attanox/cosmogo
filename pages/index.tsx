@@ -37,13 +37,7 @@ const Home: NextPage<LocalProps> = (props) => {
       <div className="w-full max-h-screen pr-2 flex flex-col gap-2">
         <div className="bg-neutral rounded-lg py-6 px-2 h-full flex-1">
           <Heading>Pick your suit colors</Heading>
-          <Customizer
-            onChange={(current, color) => console.log({ current, color })}
-            initialColors={{
-              Suit_Base: "#ffffff",
-              Suit_Details: "#ffffff",
-            }}
-          />
+          <Customizer />
         </div>
         <div className="bg-neutral rounded-lg py-6 px-2 h-full flex-1">
           <Heading>Get the experience of a lifetime</Heading>

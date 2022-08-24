@@ -18,4 +18,9 @@ fragment Cart on Cart {
       amount
     }
   }
+  suit {
+    id
+    baseColor
+    detailsColor
+  }
 }

@@ -1,0 +1,7 @@
+# import Cart from "./CartFragment"
+
+mutation ChangeSuit($input: ChangeSuitInput!) {
+  changeSuit(input: $input) {
+    ...Cart
+  }
+}
