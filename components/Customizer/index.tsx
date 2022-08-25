@@ -86,7 +86,10 @@ export const Customizer = () => {
   if (!cartData?.cart) return null;
 
   return (
-    <div style={{ height: "500px" }} className="w-full relative">
+    <div
+      style={{ height: "700px" }}
+      className="w-full relative bg-neutral p-2 rounded-md"
+    >
       <ColorPicker
         changeColor={changeColor}
         current={state.current}

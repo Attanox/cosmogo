@@ -3,6 +3,8 @@ import { Resolvers } from "types";
 import { findOrCreateCart } from "lib/cart";
 const currencyCode = "USD";
 
+const TICKET_PRICE = 3000;
+
 const resolvers: Resolvers = {
   Query: {
     cart: async (_, { id }, { prisma }) => {
@@ -19,7 +21,7 @@ const resolvers: Resolvers = {
           id: input.id,
           name: input.name,
           description: input.details || "",
-          price: 3000,
+          price: TICKET_PRICE,
           quantity: input.quantity || 1,
         },
         where: { id_cartId: { id: input.id, cartId: cart.id } },

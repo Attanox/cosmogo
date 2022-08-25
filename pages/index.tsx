@@ -1,58 +1,51 @@
 import React from "react";
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import Cart from "components/Cart";
-import { Customizer } from "components/Customizer";
-import LaunchDetail from "components/LaunchDetail";
+import { gql } from "@apollo/client";
 import type { GetServerSideProps, NextPage } from "next";
-import { Dragon, Launch } from "types";
+import type { Dragon, Launch } from "types";
+
+import LaunchList from "components/LaunchList";
+import { getSpacexClient } from "lib/apollo.client";
 
 interface LocalProps {
   launches: Launch[];
   dragons: Dragon[];
 }
 
-const Heading = ({ children }: React.PropsWithChildren<{}>) => (
-  <h1 className="heading text-center text-white text-2xl tracking-wide capitalize">
-    {children}
-  </h1>
-);
+const BG_IMG =
+  "https://images.unsplash.com/photo-1494022299300-899b96e49893?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80";
 
-const Home: NextPage<LocalProps> = (props) => {
+const HomePage: NextPage<LocalProps> = (props) => {
   const { launches, dragons } = props;
 
   return (
-    <div className="grid grid-cols-2 h-screen py-2 gap-4">
-      <div className="max-h-full h-fit w-full p-2 ml-2 grid gap-4 scrollbar overflow-y-auto bg-neutral rounded-lg">
-        <div className="w-full h-1" />
-        <Heading>Pick your launches</Heading>
-        <div className="w-full h-1" />
-        {launches.map((launch) => (
-          <LaunchDetail
-            key={`${launch.id}-${launch.mission_name}`}
-            launch={launch}
-            dragons={dragons}
-          />
-        ))}
-      </div>
-      <div className="w-full max-h-screen pr-2 flex flex-col gap-2">
-        <div className="bg-neutral rounded-lg py-6 px-2 h-full flex-1">
-          <Heading>Pick your suit colors</Heading>
-          <Customizer />
+    <>
+      <header
+        className="hero min-h-screen"
+        style={{ backgroundImage: `url(${BG_IMG})`, minHeight: "90vh" }}
+      >
+        <div className="hero-overlay bg-opacity-90"></div>
+        <div className="hero-content text-center text-neutral-content">
+          <div className="max-w-full">
+            <h2 className="heading w-full text-white text-left tracking-wide text-2xl">
+              Reach for the stars
+            </h2>
+            <div className="h-8" />
+            <h1 className="heading w-full text-white text-left tracking-wide text-8xl">
+              Travel with <span className="text-accent uppercase">Cosmogo</span>
+            </h1>
+          </div>
         </div>
-        <div className="bg-neutral rounded-lg py-6 px-2 h-full flex-1">
-          <Heading>Get the experience of a lifetime</Heading>
-          <Cart dragons={dragons} />
-        </div>
-      </div>
-    </div>
+      </header>
+
+      <main>
+        <LaunchList dragons={dragons} launches={launches} />
+      </main>
+    </>
   );
 };
 
 export const getServerSideProps: GetServerSideProps<LocalProps> = async () => {
-  const client = new ApolloClient({
-    uri: "https://api.spacex.land/graphql/",
-    cache: new InMemoryCache(),
-  });
+  const client = getSpacexClient();
 
   const { data } = await client.query<{
     launches: Launch[];
@@ -96,4 +89,4 @@ export const getServerSideProps: GetServerSideProps<LocalProps> = async () => {
   };
 };
 
-export default Home;
+export default HomePage;

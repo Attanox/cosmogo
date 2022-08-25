@@ -10,6 +10,7 @@ import {
 import { useCartId } from "hooks/cart.hooks";
 import { debounce } from "ts-debounce";
 import { removeCookies } from "cookies-next";
+import Link from "next/link";
 
 const RemoveCartItem = (props: { cartId: string; itemId: string }) => {
   const { cartId, itemId } = props;
@@ -167,7 +168,6 @@ const FinishOrder = (props: { cartId: string }) => {
         setFinished(true);
         setTimeout(() => setFinished(false), 5000);
       }}
-      style={{ width: "fit-content" }}
       className="btn btn-accent"
     >
       <svg
@@ -202,7 +202,7 @@ const Cart = (props: { dragons: Dragon[] }) => {
   if (!cartData?.cart) return null;
 
   return (
-    <div className="flex flex-col h-full py-2 gap-2">
+    <div className="w-4/5 mx-auto bg-neutral flex flex-col p-2 gap-2 rounded-md">
       <div className="overflow-x-auto max-h-96 flex-grow scrollbar">
         <table className="table w-full">
           <thead>
@@ -265,7 +265,11 @@ const Cart = (props: { dragons: Dragon[] }) => {
           ({cartData.cart.totalItems} items)
         </span>
 
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center">
+          <Link href="/suit">
+            <a className="link">Don&apos;t forget to customize your suit!</a>
+          </Link>
+          <div className="w-2" />
           <FinishOrder cartId={cartId} />
         </div>
       </div>

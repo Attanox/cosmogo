@@ -24,3 +24,10 @@ export const useClient = () => {
   );
   return client;
 };
+
+export const getSpacexClient = () => {
+  return new ApolloClient({
+    uri: "https://api.spacex.land/graphql/",
+    cache: new InMemoryCache(),
+  });
+};

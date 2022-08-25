@@ -43,7 +43,11 @@ const AddToCart = (props: {
     (i) => i.name === launch.mission_name
   );
 
-  if (itemInCart) return <span className="badge badge-accent">In cart</span>;
+  const [added, setAdded] = React.useState(false);
+
+  if ((added || itemInCart) && !addingItem && !loading) {
+    return <span className="badge badge-accent">In cart</span>;
+  }
 
   return (
     <button
@@ -69,6 +73,7 @@ const AddToCart = (props: {
               },
             },
           });
+          setAdded(true);
         } catch (e) {
           console.error(e);
         }
@@ -93,24 +98,35 @@ const AddToCart = (props: {
   );
 };
 
-const LaunchDetail = (props: { launch: Launch; dragons: Dragon[] }) => {
-  const { launch, dragons } = props;
+const LaunchDetail = (props: {
+  launch: Launch;
+  dragons: Dragon[];
+  display: "grid" | "list";
+}) => {
+  const { launch, dragons, display } = props;
 
   const { cartId } = useCartId();
 
   return (
-    <div className="card w-full bg-primary shadow-xl image-full h-fit">
+    <div className="card w-full bg-primary shadow-xl image-full h-full">
       <figure>
         <Image src={getSrc(launch.mission_name)} alt="Space" layout="fill" />
       </figure>
       <div className="card-body text-white">
         <div className="card-actions justify-between">
           <h2 className="card-title">{launch.mission_name}</h2>
-          <AddToCart cartId={cartId} launch={launch} dragons={dragons} />
+          {display === "list" ? (
+            <AddToCart cartId={cartId} launch={launch} dragons={dragons} />
+          ) : null}
         </div>
         <p>{launch.details}</p>
         <div>
           Launching from <b>{launch.launch_site.site_name_long}</b>
+        </div>
+        <div className="card-actions justify-end">
+          {display === "grid" ? (
+            <AddToCart cartId={cartId} launch={launch} dragons={dragons} />
+          ) : null}
         </div>
       </div>
     </div>
