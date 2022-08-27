@@ -13,7 +13,7 @@ const Layout = ({ children }: React.PropsWithChildren<{}>) => {
       </div>
 
       <footer className="w-full static py-1 bottom-0 bg-neutral text-white text-center">
-        <span>&copy; Copyright: cosmogo.com</span>
+        <span>Made with ❤</span>
       </footer>
     </div>
   );

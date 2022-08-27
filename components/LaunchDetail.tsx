@@ -121,7 +121,10 @@ const LaunchDetail = (props: {
         </div>
         <p>{launch.details}</p>
         <div>
-          Launching from <b>{launch.launch_site.site_name_long}</b>
+          Launching from{" "}
+          <span className="font-bold text-lg">
+            {launch.launch_site.site_name_long}
+          </span>
         </div>
         <div className="card-actions justify-end">
           {display === "grid" ? (

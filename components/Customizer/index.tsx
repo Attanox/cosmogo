@@ -54,30 +54,23 @@ export const Customizer = () => {
     setState({ ...state, current });
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const mutateSuitColor = React.useCallback(
-    debounce((current: string, color: string) => {
-      if (current) {
-        const input: { [key: string]: string } = {};
-        if (current === "Suit_Base") input["baseColor"] = color;
-        if (current === "Suit_Details") input["detailsColor"] = color;
+  const onMutateSuitColor = () => {
+    const input: { [key: string]: string } = {};
+    input["baseColor"] = state.items["Suit_Base"];
+    input["detailsColor"] = state.items["Suit_Details"];
 
-        changeSuit({
-          variables: {
-            input: {
-              cartId,
-              ...input,
-            },
-          },
-        });
-      }
-    }),
-    [cartData?.cart?.id]
-  );
+    changeSuit({
+      variables: {
+        input: {
+          cartId,
+          ...input,
+        },
+      },
+    });
+  };
 
   const changeColor = (color: string) => {
     setState({ ...state, items: { ...state.items, [state.current]: color } });
-    mutateSuitColor(state.current, color);
   };
 
   if (!cartId || loading)
@@ -92,9 +85,15 @@ export const Customizer = () => {
     >
       <ColorPicker
         changeColor={changeColor}
-        current={state.current}
         currentColor={state.items[state.current]}
       />
+      <button
+        onClick={onMutateSuitColor}
+        type="button"
+        className="absolute z-30 btn btn-primary top-6 right-6"
+      >
+        Submit colors
+      </button>
       <Canvas style={{ width: "100%", height: "100%" }}>
         <ambientLight intensity={0.3} />
         <spotLight

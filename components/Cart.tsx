@@ -201,6 +201,17 @@ const Cart = (props: { dragons: Dragon[] }) => {
 
   if (!cartData?.cart) return null;
 
+  if (!cartData.cart.totalItems) {
+    return (
+      <h2 className="text-white text-2xl text-center">
+        Cart is empty. Go shop{" "}
+        <Link href="/">
+          <a className="link link-accent">launches</a>
+        </Link>
+      </h2>
+    );
+  }
+
   return (
     <div className="w-4/5 mx-auto bg-neutral flex flex-col p-2 gap-2 rounded-md">
       <div className="overflow-x-auto max-h-96 flex-grow scrollbar">
@@ -239,7 +250,7 @@ const Cart = (props: { dragons: Dragon[] }) => {
 
       <div className="mt-auto p-2 w-full flex items-center justify-center">
         <div className="flex items-center">
-          <span>Base Color:</span>
+          <span>Base Color is </span>
           <div className="w-2" />
           <div
             style={{ backgroundColor: cartData.cart.suit.baseColor }}
@@ -248,7 +259,7 @@ const Cart = (props: { dragons: Dragon[] }) => {
         </div>
         <div className="w-5" />
         <div className="flex">
-          <span>Details Color:</span>
+          <span>Details Color is </span>
           <div className="w-2" />
           <div
             style={{ backgroundColor: cartData.cart.suit.detailsColor }}

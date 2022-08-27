@@ -60,8 +60,8 @@ const Model = (props: LocalProps) => {
           ((e.object as Mesh).material as MeshStandardMaterial).name
         );
       }}
-      scale={1.75}
-      position={[0, -2, 0]}
+      scale={2}
+      position={[0, -3, 0]}
     >
       {Object.keys(meshNodes).map((key) => {
         const partName = (meshNodes[key].material as MeshStandardMaterial).name;
