@@ -1,67 +1,39 @@
-import React, { useState } from "react";
+import React from "react";
 import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import ColorPicker from "./ColorPicker";
 import Model from "./Model";
-import { useCartId } from "hooks/cart.hooks";
-import {
-  GetCartDocument,
-  useChangeSuitMutation,
-  useGetCartQuery,
-} from "types/appTypes";
-import { debounce } from "ts-debounce";
+import { GetCartDocument, useChangeSuitMutation } from "types/appTypes";
+import { TItems } from "pages/suit";
 
-type TGenericObject = { [key: string]: string };
+interface LocalProps {
+  cartId: string;
+  initItems: TItems;
+}
 
-export type TGlobalState = {
-  current: string;
-  items: TGenericObject;
-};
+type TCurrent = keyof TItems;
 
-const INITIAL_STATE: TGlobalState = {
-  current: "",
-  items: {},
-};
+export const Customizer = (props: LocalProps) => {
+  const { cartId, initItems } = props;
 
-const createInitialState = (initItemColors: TGenericObject = {}) => {
-  return {
-    ...INITIAL_STATE,
-    items: {
-      ...initItemColors,
-    },
-  };
-};
+  const [current, setCurrent] = React.useState<TCurrent | "">("");
 
-export const Customizer = () => {
-  const { cartId } = useCartId();
+  const [items, setItems] = React.useState<TItems>(initItems);
+  const [success, setSuccess] = React.useState(false);
 
-  const [state, setState] = useState<TGlobalState>(INITIAL_STATE);
-
-  const { data: cartData, loading } = useGetCartQuery({
-    variables: { id: cartId || "" },
-    skip: !cartId,
-    onCompleted(data) {
-      const initState = createInitialState({
-        Suit_Base: data?.cart?.suit.baseColor as string,
-        Suit_Details: data?.cart?.suit.detailsColor as string,
-      });
-      setState(initState);
-    },
-  });
-
-  const [changeSuit] = useChangeSuitMutation({
+  const [changeSuit, { loading: changingSuit }] = useChangeSuitMutation({
     refetchQueries: [GetCartDocument],
+    onCompleted(data) {
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 1500);
+    },
   });
-
-  const setCurrent = (current: string) => {
-    setState({ ...state, current });
-  };
 
   const onMutateSuitColor = () => {
     const input: { [key: string]: string } = {};
-    input["baseColor"] = state.items["Suit_Base"];
-    input["detailsColor"] = state.items["Suit_Details"];
+    input["baseColor"] = items["Suit_Base"];
+    input["detailsColor"] = items["Suit_Details"];
 
     changeSuit({
       variables: {
@@ -74,13 +46,11 @@ export const Customizer = () => {
   };
 
   const changeColor = (color: string) => {
-    setState({ ...state, items: { ...state.items, [state.current]: color } });
+    setItems((prevItems) => ({
+      ...prevItems,
+      [current]: color,
+    }));
   };
-
-  if (!cartId || loading)
-    return <div className="text-center text-large">Loading...</div>;
-
-  if (!cartData?.cart) return null;
 
   return (
     <div
@@ -89,13 +59,47 @@ export const Customizer = () => {
     >
       <ColorPicker
         changeColor={changeColor}
-        currentColor={state.items[state.current]}
+        currentColor={current ? items[current] : ""}
       />
+      <div className="absolute left-6 top-36 z-20 flex flex-col">
+        {Object.keys(items).map((key) => {
+          return (
+            <button
+              onClick={() => setCurrent(key as keyof TItems)}
+              type="button"
+              key={key}
+              className="btn btn-ghost"
+            >
+              {key}
+            </button>
+          );
+        })}
+      </div>
+
       <button
         onClick={onMutateSuitColor}
         type="button"
-        className="absolute z-30 btn btn-primary top-6 right-6"
+        disabled={changingSuit}
+        className={`absolute z-30 btn btn-primary top-6 right-6 ${
+          changingSuit ? "loading" : ""
+        } ${success ? "btn-success gap-2" : ""}`}
       >
+        {success && !changingSuit ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4.5 12.75l6 6 9-13.5"
+            />
+          </svg>
+        ) : null}
         Submit colors
       </button>
       <Canvas style={{ width: "100%", height: "100%" }}>
@@ -115,7 +119,7 @@ export const Customizer = () => {
           castShadow
         />
         <Suspense fallback={null}>
-          <Model setCurrent={setCurrent} state={state} />
+          <Model setCurrent={setCurrent} items={items} />
         </Suspense>
         <OrbitControls
           minPolarAngle={Math.PI / 2}

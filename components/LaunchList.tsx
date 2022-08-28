@@ -79,7 +79,7 @@ const OrderSelect = (props: { setLaunches: (launches: Launch[]) => void }) => {
     }>({
       query: gql`
       query GetLaunches {
-        launches(order: ${orderBy}) {
+        launches(order: ${orderBy}_${orderAs}) {
           details
           id
           mission_name
@@ -115,20 +115,125 @@ const OrderSelect = (props: { setLaunches: (launches: Launch[]) => void }) => {
           onChange={onOrder}
           className="w-full select select-bordered select-primary"
         >
-          <option value={`mission_name${SEPARATOR}asc`}>
+          <option value={`mission_name${SEPARATOR}ASC`}>
             Mission name ascending
           </option>
-          <option value={`mission_name${SEPARATOR}desc`}>
+          <option value={`mission_name${SEPARATOR}DESC`}>
             Mission name descending
           </option>
-          <option value={`site_name_long${SEPARATOR}asc`}>
+          <option value={`site_name_long${SEPARATOR}ASC`}>
             Launch site ascending
           </option>
-          <option value={`site_name_long${SEPARATOR}desc`}>
+          <option value={`site_name_long${SEPARATOR}DESC`}>
             Launch site descending
           </option>
         </select>
       </div>
+    </div>
+  );
+};
+
+const PAGINATE_BY = 10;
+
+const usePagination = (setLaunches: (launches: Launch[]) => void) => {
+  const client = getSpacexClient();
+
+  const [offset, setOffset] = React.useState(0);
+  const [gettingLaunches, setGettingLaunches] = React.useState(false);
+
+  const getLaunches = async (offset: number) =>
+    await client.query<{
+      launches: Launch[];
+    }>({
+      query: gql`
+        query GetLaunches {
+          launches(limit: ${PAGINATE_BY}, offset: ${offset}) {
+            details
+            id
+            mission_name
+            launch_site {
+              site_name_long
+            }
+            links {
+              article_link
+              mission_patch
+            }
+          }
+        }
+      `,
+    });
+
+  const onNextPage = async () => {
+    const newOffset = offset + PAGINATE_BY;
+    setGettingLaunches(true);
+    const { data } = await getLaunches(newOffset);
+    setGettingLaunches(false);
+    setLaunches(data.launches);
+    setOffset(newOffset);
+  };
+  const onPrevPage = async () => {
+    const newOffset = offset - PAGINATE_BY ? offset - PAGINATE_BY : 0;
+    setGettingLaunches(true);
+    const { data } = await getLaunches(newOffset);
+    setGettingLaunches(false);
+    setLaunches(data.launches);
+    setOffset(newOffset);
+  };
+
+  return { gettingLaunches, onNextPage, onPrevPage };
+};
+
+const Pagination = (props: { setLaunches: (launches: Launch[]) => void }) => {
+  const { setLaunches } = props;
+  const { gettingLaunches, onNextPage, onPrevPage } =
+    usePagination(setLaunches);
+
+  return (
+    <div className="w-full flex items-center justify-between">
+      <button
+        type="button"
+        disabled={gettingLaunches}
+        onClick={onPrevPage}
+        className={`btn btn-primary gap-2 ${gettingLaunches ? "loading" : ""}`}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M21 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953l7.108-4.062A1.125 1.125 0 0121 8.688v8.123zM11.25 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953L9.567 7.71a1.125 1.125 0 011.683.977v8.123z"
+          />
+        </svg>
+        Previous
+      </button>
+      <button
+        type="button"
+        disabled={gettingLaunches}
+        onClick={onNextPage}
+        className={`btn btn-primary gap-2 ${gettingLaunches ? "loading" : ""}`}
+      >
+        Next{" "}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3 8.688c0-.864.933-1.405 1.683-.977l7.108 4.062a1.125 1.125 0 010 1.953l-7.108 4.062A1.125 1.125 0 013 16.81V8.688zM12.75 8.688c0-.864.933-1.405 1.683-.977l7.108 4.062a1.125 1.125 0 010 1.953l-7.108 4.062a1.125 1.125 0 01-1.683-.977V8.688z"
+          />
+        </svg>
+      </button>
     </div>
   );
 };
@@ -140,13 +245,15 @@ const LaunchList = (props: LocalProps) => {
   const [launches, setLaunches] = React.useState<Launch[]>(initialLaunches);
 
   return (
-    <div className={`sm:w-4/5 sm:mx-auto mx-2 w-full my-4`}>
+    <div id="launches" className={`sm:w-4/5 sm:mx-auto mx-2 w-full my-4`}>
       <div className="w-full h-1" />
-      <div className="bg-neutral rounded-lg p-2 py-4 flex justify-between">
+      <div className="bg-neutral bg-opacity-50 rounded-lg p-2 py-4 flex justify-between">
         <OrderSelect setLaunches={setLaunches} />
         <LaunchLayout display={display} setDisplay={setDisplay} />
       </div>
       <div className="w-full h-4" />
+      <Pagination setLaunches={setLaunches} />
+      <div className="w-full h-2" />
       <div
         style={
           display === "grid"
@@ -167,6 +274,9 @@ const LaunchList = (props: LocalProps) => {
           />
         ))}
       </div>
+      <div className="w-full h-2" />
+      <Pagination setLaunches={setLaunches} />
+      <div className="w-full h-4" />
     </div>
   );
 };

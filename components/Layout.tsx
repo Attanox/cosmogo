@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 const Layout = ({ children }: React.PropsWithChildren<{}>) => {
   return (
     <div className="flex flex-col w-full min-h-screen">
-      <div className="fixed z-10 w-full top-2">
+      <div className="fixed z-10 w-full top-0">
         <Navbar />
       </div>
 

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 
 const protocol = `${
   process.env.NODE_ENV === "development" ? "http" : "https"
@@ -25,9 +25,16 @@ export const useClient = () => {
   return client;
 };
 
+const link = new HttpLink({
+  uri: "https://api.spacex.land/graphql/",
+  fetchOptions: {
+    mode: "no-cors",
+  },
+});
+
 export const getSpacexClient = () => {
   return new ApolloClient({
-    uri: "https://api.spacex.land/graphql/",
+    link,
     cache: new InMemoryCache(),
   });
 };

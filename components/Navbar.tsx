@@ -28,9 +28,38 @@ const GoToCart = () => {
   );
 };
 
+const useScrolledOnTop = () => {
+  const [onTop, setOnTop] = React.useState(true);
+
+  React.useEffect(() => {
+    const onScroll = () => {
+      const offsetTop = window.scrollY;
+      if (offsetTop === 0) {
+        setOnTop(true);
+      } else {
+        setOnTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  return { onTop };
+};
+
 const Navbar = () => {
+  const { onTop } = useScrolledOnTop();
+
   return (
-    <div className="navbar w-full mx-auto px-5 rounded-md">
+    <div
+      className={`navbar w-full mx-auto px-5 py-4 rounded-none transition-colors ease-in-out delay-150 ${
+        onTop ? "bg-transparent" : "bg-primary bg-opacity-50"
+      }`}
+    >
       <div className="navbar-center">
         <Link href="/">
           <a className="btn btn-ghost normal-case text-xl text-white">
@@ -39,7 +68,7 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="ml-auto navbar-end">
-        <Link href="/">
+        <Link href="/#launches">
           <a className="btn btn-ghost normal-case text-xl text-white">
             Launches 🚀
           </a>
