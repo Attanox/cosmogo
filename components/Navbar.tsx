@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { useCartId } from "hooks/cart.hooks";
-import { useGetCartQuery } from "types";
+import { useGetCartQuery } from "types/appTypes";
 
 const GoToCart = () => {
   const { cartId } = useCartId();

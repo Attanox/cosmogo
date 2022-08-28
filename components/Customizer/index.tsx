@@ -5,7 +5,11 @@ import { OrbitControls } from "@react-three/drei";
 import ColorPicker from "./ColorPicker";
 import Model from "./Model";
 import { useCartId } from "hooks/cart.hooks";
-import { GetCartDocument, useChangeSuitMutation, useGetCartQuery } from "types";
+import {
+  GetCartDocument,
+  useChangeSuitMutation,
+  useGetCartQuery,
+} from "types/appTypes";
 import { debounce } from "ts-debounce";
 
 type TGenericObject = { [key: string]: string };

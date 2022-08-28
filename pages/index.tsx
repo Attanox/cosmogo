@@ -1,11 +1,11 @@
 import React from "react";
 import { gql } from "@apollo/client";
 import type { GetStaticProps, NextPage } from "next";
-import type { Dragon, Launch } from "types";
 
 import LaunchList from "components/LaunchList";
 import { getSpacexClient } from "lib/apollo.client";
 import Error from "components/Error";
+import { Dragon, Launch } from "types/spaceXTypes";
 
 interface LocalProps {
   launches: Launch[];
@@ -15,8 +15,6 @@ interface LocalProps {
 
 const BG_IMG =
   "https://images.unsplash.com/photo-1581293963396-4d8804f556c2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80";
-// const BG_IMG =
-//   "https://images.unsplash.com/photo-1494022299300-899b96e49893?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80";
 
 const HomePage: NextPage<LocalProps> = (props) => {
   const { launches, dragons, error } = props;

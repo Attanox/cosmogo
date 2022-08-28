@@ -1,7 +1,7 @@
 import { getCookie, setCookies } from "cookies-next";
 import { IncomingMessage, ServerResponse } from "http";
 import { NextApiRequestCookies } from "next/dist/server/api-utils";
-import { useGetCartQuery } from "types";
+import { useGetCartQuery } from "types/appTypes";
 import { v4 as uuid } from "uuid";
 
 export function useCart() {

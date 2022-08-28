@@ -1,5 +1,5 @@
 import currencyFormatter from "currency-formatter";
-import { Resolvers } from "types";
+import { Resolvers } from "types/appTypes";
 import { findOrCreateCart } from "lib/cart";
 const currencyCode = "USD";
 

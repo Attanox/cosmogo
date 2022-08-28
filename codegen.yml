@@ -1,10 +1,10 @@
 overwrite: true
-schema: "./graphql/schema.graphql"
-documents: "./graphql/documents/*.graphql"
 generates:
-  types.ts:
+  types/appTypes.ts:
+    documents: "./graphql/documents/*.graphql"
+    schema: "./graphql/schema.graphql"
     config:
-      contextType: ./pages/api/index#GraphQLContext
+      contextType: ../pages/api/index#GraphQLContext
       mapperTypeSuffix: Model
       mappers:
         Cart: "@prisma/client#Cart"
@@ -15,3 +15,7 @@ generates:
       - "typescript-operations"
       - "typescript-resolvers"
       - "typescript-react-apollo"
+  types/spaceXTypes.ts:
+    schema: "https://raw.githubusercontent.com/SpaceXLand/api/master/schema.graphql"
+    plugins:
+      - "typescript"

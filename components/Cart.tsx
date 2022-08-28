@@ -1,16 +1,16 @@
 import React from "react";
 import {
-  Dragon,
   GetCartDocument,
   useGetCartQuery,
   useRemoveFromCartMutation,
   useUpdateCartMutation,
   useDeleteCartMutation,
-} from "types";
+} from "types/appTypes";
 import { useCartId } from "hooks/cart.hooks";
 import { debounce } from "ts-debounce";
 import { removeCookies } from "cookies-next";
 import Link from "next/link";
+import { Dragon } from "types/spaceXTypes";
 
 const RemoveCartItem = (props: { cartId: string; itemId: string }) => {
   const { cartId, itemId } = props;
@@ -58,7 +58,7 @@ const SeatsCounter = (props: {
   const { dragons, cartId, itemId } = props;
 
   const [selectedDragonId, setSelectedDragonId] = React.useState<string>(
-    dragons[0].id
+    dragons[0].id as string
   );
   const [seats, setSeats] = React.useState<number>(1);
 
@@ -110,7 +110,7 @@ const SeatsCounter = (props: {
         >
           {dragons.map((dragon) => {
             return (
-              <option key={dragon.id} value={dragon.id}>
+              <option key={dragon.id} value={dragon.id as string}>
                 {dragon.name}
               </option>
             );

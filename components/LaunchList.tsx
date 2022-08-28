@@ -1,9 +1,9 @@
 import React from "react";
 
 import LaunchDetail from "./LaunchDetail";
-import type { Dragon, Launch } from "types";
 import { getSpacexClient } from "lib/apollo.client";
 import { gql } from "@apollo/client";
+import { Dragon, Launch } from "types/spaceXTypes";
 
 interface LocalProps {
   initialLaunches: Launch[];

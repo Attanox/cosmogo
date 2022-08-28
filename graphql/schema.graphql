@@ -81,23 +81,6 @@ input ChangeSuitInput {
   detailsColor: String
 }
 
-type Launch {
-  details: String!
-  id: String!
-  mission_name: String!
-  launch_site: LaunchSite!
-  links: Links!
-}
-
-type LaunchSite {
-  site_name_long: String!
-}
-
-type Links {
-  article_link: String!
-  mission_patch: String!
-}
-
 type Dragon {
   crew_capacity: Int!
   description: String!

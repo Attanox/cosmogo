@@ -2,12 +2,11 @@ import { useCartId } from "hooks/cart.hooks";
 import Image from "next/image";
 import React from "react";
 import {
-  Dragon,
   GetCartDocument,
-  Launch,
   useAddToCartMutation,
   useGetCartQuery,
-} from "types";
+} from "types/appTypes";
+import { Dragon, Launch } from "types/spaceXTypes";
 
 const getSrc = (id: string) => {
   const IMGS = [
@@ -61,14 +60,14 @@ const AddToCart = (props: {
             variables: {
               input: {
                 cartId,
-                id: launch.id,
-                name: launch.mission_name,
+                id: launch.id as string,
+                name: launch.mission_name as string,
                 details: launch.details,
                 capsule: {
-                  crew_capacity: dragons[0].crew_capacity,
-                  description: dragons[0].description,
-                  id: dragons[0].id,
-                  name: dragons[0].name,
+                  crew_capacity: dragons[0].crew_capacity as number,
+                  description: dragons[0].description as string,
+                  id: dragons[0].id as string,
+                  name: dragons[0].name as string,
                 },
               },
             },
@@ -110,7 +109,11 @@ const LaunchDetail = (props: {
   return (
     <div className="card w-full bg-primary shadow-xl image-full h-full">
       <figure>
-        <Image src={getSrc(launch.mission_name)} alt="Space" layout="fill" />
+        <Image
+          src={getSrc(launch.mission_name as string)}
+          alt="Space"
+          layout="fill"
+        />
       </figure>
       <div className="card-body text-white">
         <div className="card-actions justify-between">
@@ -123,7 +126,7 @@ const LaunchDetail = (props: {
         <div>
           Launching from{" "}
           <span className="font-bold text-lg">
-            {launch.launch_site.site_name_long}
+            {launch?.launch_site?.site_name_long}
           </span>
         </div>
         <div className="card-actions justify-end">
