@@ -11,12 +11,12 @@ interface LocalProps {
 }
 
 type Display = "list" | "grid";
-type OrderBy = "mission_name" | "site_name_long";
-type OrderAs = "asc" | "des";
+type Order = "mission_name" | "site_name_long";
+type Sort = "asc" | "des";
 
 const SEPARATOR = "+";
 
-const LaunchLayout = (props: {
+const LayoutSelect = (props: {
   setDisplay: (d: Display) => void;
   display: Display;
 }) => {
@@ -72,37 +72,40 @@ const LaunchLayout = (props: {
 const OrderSelect = (props: { setLaunches: (launches: Launch[]) => void }) => {
   const { setLaunches } = props;
   const client = getSpacexClient();
+  const [loading, setLoading] = React.useState(false);
 
-  const orderLaunches = async (orderBy: OrderBy, orderAs: OrderAs) => {
+  const orderLaunches = async (order: Order, sort: Sort) => {
+    setLoading(true);
     const { data } = await client.query<{
       launches: Launch[];
     }>({
       query: gql`
-      query GetLaunches {
-        launches(order: ${orderBy}_${orderAs}) {
-          details
-          id
-          mission_name
-          launch_site {
-            site_name_long
-          }
-          links {
-            article_link
-            mission_patch
+        query GetLaunches {
+          launches(order: ${order}, sort: ${sort}) {
+            details
+            id
+            mission_name
+            launch_site {
+              site_name_long
+            }
+            links {
+              article_link
+              mission_patch
+            }
           }
         }
-      }
-    `,
+      `,
     });
+    setLoading(false);
     setLaunches(data.launches);
   };
 
   const onOrder = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    const orderBy = value.split(SEPARATOR)[0] as OrderBy;
-    const orderAs = value.split(SEPARATOR)[1] as OrderAs;
+    const order = value.split(SEPARATOR)[0] as Order;
+    const sort = value.split(SEPARATOR)[1] as Sort;
 
-    orderLaunches(orderBy, orderAs);
+    orderLaunches(order, sort);
   };
 
   return (
@@ -113,6 +116,7 @@ const OrderSelect = (props: { setLaunches: (launches: Launch[]) => void }) => {
         </span>
         <select
           onChange={onOrder}
+          disabled={loading}
           className="w-full select select-bordered select-primary"
         >
           <option value={`mission_name${SEPARATOR}ASC`}>
@@ -249,7 +253,7 @@ const LaunchList = (props: LocalProps) => {
       <div className="w-full h-1" />
       <div className="bg-neutral bg-opacity-50 rounded-lg p-2 py-4 flex justify-between">
         <OrderSelect setLaunches={setLaunches} />
-        <LaunchLayout display={display} setDisplay={setDisplay} />
+        <LayoutSelect display={display} setDisplay={setDisplay} />
       </div>
       <div className="w-full h-4" />
       <Pagination setLaunches={setLaunches} />
