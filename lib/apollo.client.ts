@@ -26,10 +26,7 @@ export const useClient = () => {
 };
 
 const link = new HttpLink({
-  uri: "https://api.spacex.land/graphql/",
-  fetchOptions: {
-    mode: "no-cors",
-  },
+  uri: "https://spacexdata.herokuapp.com/graphql/",
 });
 
 export const getSpacexClient = () => {

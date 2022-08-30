@@ -57,7 +57,7 @@ const Navbar = () => {
   return (
     <div
       className={`navbar w-full mx-auto px-5 py-4 rounded-none transition-colors ease-in-out delay-150 ${
-        onTop ? "bg-transparent" : "bg-primary bg-opacity-50"
+        onTop ? "bg-transparent" : "bg-primary bg-opacity-80"
       }`}
     >
       <div className="navbar-center">

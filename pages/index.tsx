@@ -2,10 +2,11 @@ import React from "react";
 import { gql } from "@apollo/client";
 import type { GetStaticProps, NextPage } from "next";
 
-import LaunchList from "components/LaunchList";
+import LaunchList, { INITIAL_FILTERS } from "components/LaunchList";
 import { getSpacexClient } from "lib/apollo.client";
 import Error from "components/Error";
-import { Dragon, Launch } from "types/spaceXTypes";
+import type { Dragon, Launch } from "types/spaceXTypes";
+import { dragonData, launchData, PAGINATE_BY } from "graphql/spaceX";
 
 interface LocalProps {
   launches: Launch[];
@@ -78,23 +79,11 @@ export const getStaticProps: GetStaticProps<LocalProps> = async () => {
     }>({
       query: gql`
         query GetLaunches {
-          launches(limit: 10) {
-            details
-            id
-            mission_name
-            launch_site {
-              site_name_long
-            }
-            links {
-              article_link
-              mission_patch
-            }
+          launches(limit: ${PAGINATE_BY}, offset: 0, order: ${INITIAL_FILTERS.order}, sort: "${INITIAL_FILTERS.sort}") {
+            ${launchData}
           }
           dragons {
-            crew_capacity
-            description
-            name
-            id
+            ${dragonData}
           }
         }
       `,
@@ -117,56 +106,9 @@ export const getStaticProps: GetStaticProps<LocalProps> = async () => {
     console.error(e);
     return {
       props: {
-        dragons: [
-          {
-            crew_capacity: 7,
-            description: "allssfsafsaf",
-            id: "132213333",
-            name: "Dracarys",
-          },
-        ],
-        launches: [
-          {
-            details:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin at cursus ligula. Suspendisse convallis placerat libero et tincidunt. Nulla vel ex eros. Donec efficitur molestie magna, eu rhoncus urna aliquet ac. Maecenas iaculis vel erat vitae aliquet. Etiam pulvinar mollis massa sed faucibus.",
-            id: "1223333444",
-            launch_site: {
-              site_name_long: "NY",
-            },
-            links: {
-              article_link: "/rea/",
-              mission_patch: "ddd",
-            },
-            mission_name: "Solaris",
-          },
-          {
-            details:
-              "Morbi pellentesque ultricies elit, ut volutpat turpis. Phasellus et condimentum sapien. Maecenas tempus sodales felis. Phasellus sagittis libero finibus mauris sagittis placerat. Mauris id elit dui. Praesent pretium bibendum accumsan.",
-            id: "1223333445",
-            launch_site: {
-              site_name_long: "LA",
-            },
-            links: {
-              article_link: "/rea/",
-              mission_patch: "ddd",
-            },
-            mission_name: "Andromeda",
-          },
-          {
-            details:
-              "Nam cursus felis a velit congue euismod. Ut a sagittis velit, vel rutrum diam. Sed pellentesque sollicitudin vehicula. Sed mollis sapien sed dapibus fringilla.",
-            id: "1223333446",
-            launch_site: {
-              site_name_long: "TX",
-            },
-            links: {
-              article_link: "/rea/",
-              mission_patch: "ddd",
-            },
-            mission_name: "Artemis",
-          },
-        ],
-        error: false,
+        dragons: [],
+        launches: [],
+        error: true,
       },
     };
   }

@@ -1,10 +1,11 @@
+import React from "react";
 import { gql } from "@apollo/client";
+import { type GetStaticProps, type NextPage } from "next";
+
+import { getSpacexClient } from "lib/apollo.client";
 import Cart from "components/Cart";
 import Error from "components/Error";
-import { getSpacexClient } from "lib/apollo.client";
-import { GetStaticProps, NextPage } from "next";
-import React from "react";
-import { Dragon } from "types/spaceXTypes";
+import type { Dragon } from "types/spaceXTypes";
 
 interface LocalProps {
   dragons: Dragon[];
