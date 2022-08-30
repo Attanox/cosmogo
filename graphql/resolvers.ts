@@ -169,6 +169,9 @@ const resolvers: Resolvers = {
       };
     },
     suit: async ({ id }, _, { prisma }) => {
+      const cart = await prisma.cart.findFirst({ where: { id } });
+      if (!cart) return null;
+
       let suit = await prisma.suit.findFirst({ where: { cartId: id } });
       if (!suit) {
         suit = await prisma.suit.create({

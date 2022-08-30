@@ -7,7 +7,7 @@ type Cart {
   totalItems: Int!
   items: [CartItem!]!
   subTotal: Money!
-  suit: Suit!
+  suit: Suit
 }
 
 type Money {

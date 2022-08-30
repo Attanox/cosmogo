@@ -72,7 +72,9 @@ const Cart = (props: { dragons: Dragon[] }) => {
           <span>Base Color is </span>
           <div className="w-2" />
           <div
-            style={{ backgroundColor: cartData.cart.suit.baseColor }}
+            style={{
+              backgroundColor: cartData.cart.suit?.baseColor || "transparent",
+            }}
             className="w-6 h-6 rounded-md"
           />
         </div>
@@ -81,7 +83,10 @@ const Cart = (props: { dragons: Dragon[] }) => {
           <span>Details Color is </span>
           <div className="w-2" />
           <div
-            style={{ backgroundColor: cartData.cart.suit.detailsColor }}
+            style={{
+              backgroundColor:
+                cartData.cart.suit?.detailsColor || "transparent",
+            }}
             className="w-6 h-6 rounded-md"
           />
         </div>

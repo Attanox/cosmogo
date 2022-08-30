@@ -33,7 +33,7 @@ export type Cart = {
   id: Scalars['ID'];
   items: Array<CartItem>;
   subTotal: Money;
-  suit: Suit;
+  suit?: Maybe<Suit>;
   totalItems: Scalars['Int'];
 };
 
@@ -168,44 +168,44 @@ export type AddToCartMutationVariables = Exact<{
 }>;
 
 
-export type AddToCartMutation = { __typename?: 'Mutation', addItem?: { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, details?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }>, suit: { __typename?: 'Suit', id: string, baseColor: string, detailsColor: string } } | null };
+export type AddToCartMutation = { __typename?: 'Mutation', addItem?: { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, details?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }>, suit?: { __typename?: 'Suit', id: string, baseColor: string, detailsColor: string } | null } | null };
 
-export type CartFragment = { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, details?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }>, suit: { __typename?: 'Suit', id: string, baseColor: string, detailsColor: string } };
+export type CartFragment = { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, details?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }>, suit?: { __typename?: 'Suit', id: string, baseColor: string, detailsColor: string } | null };
 
 export type ChangeSuitMutationVariables = Exact<{
   input: ChangeSuitInput;
 }>;
 
 
-export type ChangeSuitMutation = { __typename?: 'Mutation', changeSuit?: { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, details?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }>, suit: { __typename?: 'Suit', id: string, baseColor: string, detailsColor: string } } | null };
+export type ChangeSuitMutation = { __typename?: 'Mutation', changeSuit?: { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, details?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }>, suit?: { __typename?: 'Suit', id: string, baseColor: string, detailsColor: string } | null } | null };
 
 export type DeleteCartMutationVariables = Exact<{
   input: DeleteCartInput;
 }>;
 
 
-export type DeleteCartMutation = { __typename?: 'Mutation', deleteCart?: { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, details?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }>, suit: { __typename?: 'Suit', id: string, baseColor: string, detailsColor: string } } | null };
+export type DeleteCartMutation = { __typename?: 'Mutation', deleteCart?: { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, details?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }>, suit?: { __typename?: 'Suit', id: string, baseColor: string, detailsColor: string } | null } | null };
 
 export type GetCartQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetCartQuery = { __typename?: 'Query', cart?: { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, details?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }>, suit: { __typename?: 'Suit', id: string, baseColor: string, detailsColor: string } } | null };
+export type GetCartQuery = { __typename?: 'Query', cart?: { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, details?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }>, suit?: { __typename?: 'Suit', id: string, baseColor: string, detailsColor: string } | null } | null };
 
 export type RemoveFromCartMutationVariables = Exact<{
   input: RemoveFromCartInput;
 }>;
 
 
-export type RemoveFromCartMutation = { __typename?: 'Mutation', removeItem?: { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, details?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }>, suit: { __typename?: 'Suit', id: string, baseColor: string, detailsColor: string } } | null };
+export type RemoveFromCartMutation = { __typename?: 'Mutation', removeItem?: { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, details?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }>, suit?: { __typename?: 'Suit', id: string, baseColor: string, detailsColor: string } | null } | null };
 
 export type UpdateCartMutationVariables = Exact<{
   input: UpdateCartItemInput;
 }>;
 
 
-export type UpdateCartMutation = { __typename?: 'Mutation', updateCartItem?: { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, details?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }>, suit: { __typename?: 'Suit', id: string, baseColor: string, detailsColor: string } } | null };
+export type UpdateCartMutation = { __typename?: 'Mutation', updateCartItem?: { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, details?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }>, suit?: { __typename?: 'Suit', id: string, baseColor: string, detailsColor: string } | null } | null };
 
 
 
@@ -324,7 +324,7 @@ export type CartResolvers<ContextType = GraphQLContext, ParentType extends Resol
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   items?: Resolver<Array<ResolversTypes['CartItem']>, ParentType, ContextType>;
   subTotal?: Resolver<ResolversTypes['Money'], ParentType, ContextType>;
-  suit?: Resolver<ResolversTypes['Suit'], ParentType, ContextType>;
+  suit?: Resolver<Maybe<ResolversTypes['Suit']>, ParentType, ContextType>;
   totalItems?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

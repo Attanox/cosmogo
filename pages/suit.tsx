@@ -21,8 +21,8 @@ const SuitPage = (props: LocalProps) => {
     skip: !cartId,
     onCompleted(data) {
       const initItems = {
-        Suit_Base: data?.cart?.suit.baseColor as string,
-        Suit_Details: data?.cart?.suit.detailsColor as string,
+        Suit_Base: data?.cart?.suit?.baseColor as string,
+        Suit_Details: data?.cart?.suit?.detailsColor as string,
       };
       setItems(initItems);
     },
