@@ -11,7 +11,9 @@ const LayoutSelect = (props: {
       <button
         type="button"
         onClick={() => setDisplay("grid")}
-        className={`btn btn-square ${display === "grid" ? "btn-active" : ""}`}
+        className={`btn btn-info btn-square ${
+          display === "grid" ? "btn-active" : ""
+        }`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +34,9 @@ const LayoutSelect = (props: {
       <button
         type="button"
         onClick={() => setDisplay("list")}
-        className={`btn btn-square ${display === "list" ? "btn-active" : ""}`}
+        className={`btn btn-info btn-square ${
+          display === "list" ? "btn-active" : ""
+        }`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

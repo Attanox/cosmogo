@@ -20,7 +20,7 @@ const usePagination = (
     }>({
       query: gql`
         query GetLaunches {
-          launches(limit: ${PAGINATE_BY}, offset: ${offset}, order: ${filters.order}, sort: "${filters.sort}") {
+          launches(limit: ${PAGINATE_BY}, offset: ${offset}, order: "${filters.order}", sort: "${filters.sort}") {
             ${launchData}
           }
         }
@@ -67,7 +67,7 @@ const Pagination = (props: Props) => {
         type="button"
         disabled={onFirstPage || gettingLaunches}
         onClick={onPrevPage}
-        className={`btn btn-primary gap-2 ${gettingLaunches ? "loading" : ""}`}
+        className={`btn btn-info gap-2 ${gettingLaunches ? "loading" : ""}`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -89,7 +89,7 @@ const Pagination = (props: Props) => {
         type="button"
         disabled={gettingLaunches}
         onClick={onNextPage}
-        className={`btn btn-primary gap-2 ${gettingLaunches ? "loading" : ""}`}
+        className={`btn btn-info gap-2 ${gettingLaunches ? "loading" : ""}`}
       >
         Next{" "}
         <svg

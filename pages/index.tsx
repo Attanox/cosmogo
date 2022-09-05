@@ -23,38 +23,22 @@ const HomePage: NextPage<LocalProps> = (props) => {
   return (
     <>
       <header
-        className="hero min-h-screen relative"
-        style={{ backgroundImage: `url(${BG_IMG})`, minHeight: "100vh" }}
+        className="hero w-full mt-20 mx-auto relative rounded-2xl"
+        style={{ backgroundImage: `url(${BG_IMG})`, minHeight: "50vh" }}
       >
-        <div className="hero-overlay bg-opacity-20 bg-primary"></div>
+        <div className="hero-overlay bg-opacity-50 rounded-2xl bg-neutral"></div>
         <div className="absolute left-1/2 -translate-x-full hero-content text-center text-neutral-content">
           <div className="max-w-full">
-            <h2 className="heading w-full text-white text-left tracking-wide text-base md:text-3xl">
+            <h2 className="heading w-full text-white text-left tracking-wide text-base md:text-2xl">
               Reach for the stars
             </h2>
-            <div className="h-8" />
-            <h1 className="heading w-full text-white text-left tracking-wide text-4xl md:text-9xl">
+            {/* <div className="h-8" /> */}
+            <h1 className="heading w-full text-white text-left tracking-wide text-4xl md:text-7xl">
               Travel with
               <br />
               <span className="text-accent uppercase">Cosmogo</span>
             </h1>
           </div>
-        </div>
-        <div className="mt-auto pb-2 text-accent w-full flex justify-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="animate-bounce w-12 h-12"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-            />
-          </svg>
         </div>
       </header>
 
@@ -79,7 +63,7 @@ export const getStaticProps: GetStaticProps<LocalProps> = async () => {
     }>({
       query: gql`
         query GetLaunches {
-          launches(limit: ${PAGINATE_BY}, offset: 0, order: ${INITIAL_FILTERS.order}, sort: "${INITIAL_FILTERS.sort}") {
+          launches(limit: ${PAGINATE_BY}, offset: 0, order: "${INITIAL_FILTERS.order}", sort: "${INITIAL_FILTERS.sort}") {
             ${launchData}
           }
           dragons {

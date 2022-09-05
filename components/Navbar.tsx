@@ -22,7 +22,7 @@ const GoToCart = () => {
         {cartData?.cart?.totalItems}
       </span>
       <Link href={"/cart"}>
-        <a className="btn btn-accent">Cart 🛒</a>
+        <a className="btn btn-accent">Complete order 🛒</a>
       </Link>
     </div>
   );
@@ -56,29 +56,23 @@ const Navbar = () => {
 
   return (
     <div
-      className={`navbar w-full mx-auto px-5 py-4 rounded-none transition-colors ease-in-out delay-150 ${
-        onTop ? "bg-transparent" : "bg-primary bg-opacity-80"
+      className={`navbar w-full mx-auto px-5 py-4 rounded-none transition-colors ease-in-out delay-150 rounded-b-md bg-base-100 ${
+        onTop ? "" : "shadow-md"
       }`}
     >
       <div className="navbar-center">
         <Link href="/">
-          <a className="btn btn-ghost normal-case text-xl text-white">
-            Cosmogo 🌌
-          </a>
+          <a className="btn btn-ghost normal-case text-xl">Cosmogo 🌌</a>
         </Link>
       </div>
       <div className="ml-auto navbar-end">
-        <Link href="/#launches">
-          <a className="btn btn-ghost normal-case text-xl text-white">
-            Launches 🚀
-          </a>
+        {/* <Link href="/#launches">
+          <a className="btn btn-ghost normal-case text-xl">Launches 🚀</a>
         </Link>
         <div className="w-2" />
         <Link href="/suit">
-          <a className="btn btn-ghost normal-case text-xl text-white">
-            Suit 👩‍🚀
-          </a>
-        </Link>
+          <a className="btn btn-ghost normal-case text-xl">Suit 👩‍🚀</a>
+        </Link> */}
         <div className="w-2" />
         <GoToCart />
       </div>

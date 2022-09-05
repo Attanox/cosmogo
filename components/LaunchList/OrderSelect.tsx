@@ -32,7 +32,7 @@ const OrderSelect = (props: LocalProps) => {
     }>({
       query: gql`
         query GetLaunches {
-          launches(limit: ${PAGINATE_BY}, offset: 0, order: ${order}, sort: "${sort}") {
+          launches(limit: ${PAGINATE_BY}, offset: 0, order: "${order}", sort: "${sort}") {
             ${launchData}
           }
         }
@@ -52,13 +52,13 @@ const OrderSelect = (props: LocalProps) => {
   return (
     <div className="relative form-control w-full max-w-xs">
       <div className="indicator w-full">
-        <span className="left-12 indicator-start indicator-item badge badge-primary">
+        <span className="left-12 indicator-start indicator-item badge badge-info">
           Order by
         </span>
         <select
           onChange={onOrder}
           disabled={loading}
-          className="w-full select select-bordered select-primary"
+          className="w-full select select-bordered select-info"
           defaultValue={`${initialFilters.sort}${SEPARATOR}${initialFilters.order}`}
         >
           <option value={`mission_name${SEPARATOR}asc`}>

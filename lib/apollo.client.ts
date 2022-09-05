@@ -26,7 +26,7 @@ export const useClient = () => {
 };
 
 const link = new HttpLink({
-  uri: "https://spacexdata.herokuapp.com/graphql/",
+  uri: "https://api.spacex.land/graphql/",
 });
 
 export const getSpacexClient = () => {

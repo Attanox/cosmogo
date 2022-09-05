@@ -1,5 +1,5 @@
 const launchData = `
-  id: flight_number
+  id
   mission_name
   rocket {
     rocket_type
@@ -19,6 +19,6 @@ const dragonData = `
   id
 `;
 
-const PAGINATE_BY = 10;
+const PAGINATE_BY = 12;
 
 export { launchData, PAGINATE_BY, dragonData };

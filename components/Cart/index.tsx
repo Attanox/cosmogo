@@ -22,7 +22,7 @@ const Cart = (props: { dragons: Dragon[] }) => {
 
   if (!cartData.cart.totalItems) {
     return (
-      <h2 className="text-white text-2xl text-center">
+      <h2 className="text-2xl text-center">
         Cart is empty. Go shop{" "}
         <Link href="/">
           <a className="link link-accent">launches</a>
@@ -32,7 +32,7 @@ const Cart = (props: { dragons: Dragon[] }) => {
   }
 
   return (
-    <div className="w-4/5 mx-auto bg-neutral flex flex-col p-2 gap-2 rounded-md">
+    <div className="w-full mx-auto bg-base-100 shadow-md flex flex-col p-2 gap-2 rounded-md">
       <div className="overflow-x-auto max-h-96 flex-grow scrollbar">
         <table className="table w-full">
           <thead>
@@ -101,10 +101,6 @@ const Cart = (props: { dragons: Dragon[] }) => {
         </span>
 
         <div className="ml-auto flex items-center">
-          <Link href="/suit">
-            <a className="link">Don&apos;t forget to customize your suit!</a>
-          </Link>
-          <div className="w-2" />
           <FinishOrder cartId={cartId} />
         </div>
       </div>

@@ -30,7 +30,7 @@ const SuitPage = (props: LocalProps) => {
 
   if (!cartId || loading)
     return (
-      <div className="flex h-full w-4/5 mx-auto items-center justify-center">
+      <div className="flex h-full w-full mx-auto items-center justify-center">
         <div className="text-center text-large">Loading...</div>;
       </div>
     );
@@ -38,7 +38,7 @@ const SuitPage = (props: LocalProps) => {
   if (!cartData?.cart || !items) return null;
 
   return (
-    <div className="flex h-full w-4/5 mx-auto items-center justify-center">
+    <div className="flex h-full w-full mx-auto items-center justify-center">
       <Customizer cartId={cartId} initItems={items} />
     </div>
   );

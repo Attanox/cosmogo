@@ -25,9 +25,12 @@ const LaunchList = (props: LocalProps) => {
   const [filters, setFilters] = React.useState<Filters>(INITIAL_FILTERS);
 
   return (
-    <div id="launches" className={`sm:w-4/5 sm:mx-auto mx-2 w-full my-4`}>
+    <div
+      id="launches"
+      className={`sm:w-full sm:mx-auto mx-2 -mt-20 w-full my-4`}
+    >
       <div className="w-full h-1" />
-      <div className="bg-neutral bg-opacity-50 rounded-lg p-2 py-4 flex justify-between">
+      <div className="w-full md:w-2/3 mx-auto relative z-20 bg-base-100 shadow-md rounded-lg px-4 py-8 flex justify-between">
         <OrderSelect
           initialFilters={INITIAL_FILTERS}
           setFilters={setFilters}

@@ -54,7 +54,7 @@ export const Customizer = (props: LocalProps) => {
 
   return (
     <div
-      style={{ height: "700px" }}
+      style={{ height: "50vh" }}
       className="w-full relative bg-neutral p-2 rounded-md"
     >
       <ColorPicker

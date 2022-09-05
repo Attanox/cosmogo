@@ -34,7 +34,7 @@ const AddToCart = (props: {
 
   return (
     <button
-      className={`btn btn-sm btn-primary gap-2 ${
+      className={`btn btn-sm btn-accent gap-2 ${
         addingItem || loading ? "loading" : ""
       }`}
       disabled={addingItem || loading}
@@ -65,7 +65,7 @@ const AddToCart = (props: {
       Add
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-6 w-6"
+        className="h-5 w-5"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
