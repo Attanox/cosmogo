@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { useCartId } from "hooks/cart.hooks";
 import { useGetCartQuery } from "types/appTypes";
+import Spinner from "./Spinner";
 
 const GoToCart = () => {
   const { cartId } = useCartId();
@@ -12,7 +13,11 @@ const GoToCart = () => {
   });
 
   if (!cartId || loading)
-    return <div className="text-center text-large">Loading...</div>;
+    return (
+      <div className="text-center text-large">
+        <Spinner />
+      </div>
+    );
 
   if (!cartData?.cart) return null;
 
@@ -22,7 +27,9 @@ const GoToCart = () => {
         {cartData?.cart?.totalItems}
       </span>
       <Link href={"/cart"}>
-        <a className="btn btn-accent">Complete order 🛒</a>
+        <a className="btn btn-accent">
+          <span className="hidden sm:inline">Complete order</span> 🛒
+        </a>
       </Link>
     </div>
   );

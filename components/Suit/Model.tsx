@@ -1,7 +1,7 @@
 import React from "react";
 import { useGLTF } from "@react-three/drei";
 import type { Group, Mesh, MeshStandardMaterial } from "three";
-import { type TItems } from "pages/suit";
+import { type TItems } from ".";
 
 interface LocalProps {
   setCurrent: (c: keyof TItems | "") => void;

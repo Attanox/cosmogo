@@ -5,8 +5,8 @@ import { type GetStaticProps, type NextPage } from "next";
 import { getSpacexClient } from "lib/apollo.client";
 import Cart from "components/Cart";
 import Error from "components/Error";
+import Suit from "components/Suit";
 import type { Dragon } from "types/spaceXTypes";
-import SuitPage from "./suit";
 
 interface LocalProps {
   dragons: Dragon[];
@@ -21,8 +21,8 @@ const CartPage: NextPage<LocalProps> = ({ dragons, error }) => {
   return (
     <>
       <div className="h-20" />
-      <SuitPage />
-      <div className="h-4" />
+      <Suit />
+      <div className="h-8 sm:h-4" />
       <div className="flex h-full w-full items-center justify-center">
         <Cart dragons={dragons} />
       </div>

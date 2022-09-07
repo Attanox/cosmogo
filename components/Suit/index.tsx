@@ -1,17 +1,16 @@
-import { Customizer } from "components/Customizer";
-import { useCartId } from "hooks/cart.hooks";
-import { type GetStaticProps } from "next";
 import React from "react";
+
+import { useCartId } from "hooks/cart.hooks";
 import { useGetCartQuery } from "types/appTypes";
+import { Customizer } from "./Customizer";
+import Spinner from "components/Spinner";
 
 export type TItems = {
   Suit_Base: string;
   Suit_Details: string;
 };
 
-interface LocalProps {}
-
-const SuitPage = (props: LocalProps) => {
+const Suit = () => {
   const { cartId } = useCartId();
 
   const [items, setItems] = React.useState<TItems>();
@@ -31,7 +30,9 @@ const SuitPage = (props: LocalProps) => {
   if (!cartId || loading)
     return (
       <div className="flex h-full w-full mx-auto items-center justify-center">
-        <div className="text-center text-large">Loading...</div>;
+        <div className="text-center text-large">
+          <Spinner />
+        </div>
       </div>
     );
 
@@ -44,10 +45,4 @@ const SuitPage = (props: LocalProps) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<LocalProps> = async () => {
-  return {
-    props: {},
-  };
-};
-
-export default SuitPage;
+export default Suit;

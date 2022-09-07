@@ -57,7 +57,7 @@ const SeatsCounter = (props: {
 
   return (
     <>
-      <td>
+      <td className="h-14 sm:h-full flex sm:table-cell items-center">
         <select
           onChange={onCapsuleChange}
           className="select select-bordered w-full"
@@ -71,7 +71,7 @@ const SeatsCounter = (props: {
           })}
         </select>
       </td>
-      <td>
+      <td className="h-14 sm:h-full flex flex-col sm:table-cell justify-center">
         <input
           type="range"
           min={1}

@@ -7,7 +7,7 @@ const LayoutSelect = (props: {
   const { display, setDisplay } = props;
 
   return (
-    <div className="flex items-center">
+    <div className="flex justify-end items-center">
       <button
         type="button"
         onClick={() => setDisplay("grid")}

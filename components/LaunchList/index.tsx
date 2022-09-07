@@ -27,15 +27,16 @@ const LaunchList = (props: LocalProps) => {
   return (
     <div
       id="launches"
-      className={`sm:w-full sm:mx-auto mx-2 -mt-20 w-full my-4`}
+      className={`sm:w-full sm:mx-auto mx-0 -mt-20 w-full my-4`}
     >
       <div className="w-full h-1" />
-      <div className="w-full md:w-2/3 mx-auto relative z-20 bg-base-100 shadow-md rounded-lg px-4 py-8 flex justify-between">
+      <div className="w-full md:w-2/3 mx-auto relative z-20 bg-base-100 shadow-md rounded-md px-4 py-8 flex flex-col sm:flex-row justify-between">
         <OrderSelect
           initialFilters={INITIAL_FILTERS}
           setFilters={setFilters}
           setLaunches={setLaunches}
         />
+        <div className="w-4 h-4" />
         <LayoutSelect display={display} setDisplay={setDisplay} />
       </div>
       <div className="w-full h-4" />

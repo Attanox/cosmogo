@@ -23,17 +23,17 @@ const HomePage: NextPage<LocalProps> = (props) => {
   return (
     <>
       <header
-        className="hero w-full mt-20 mx-auto relative rounded-2xl"
+        className="hero w-full mt-20 mx-auto relative rounded-md"
         style={{ backgroundImage: `url(${BG_IMG})`, minHeight: "50vh" }}
       >
-        <div className="hero-overlay bg-opacity-50 rounded-2xl bg-neutral"></div>
-        <div className="absolute left-1/2 -translate-x-full hero-content text-center text-neutral-content">
+        <div className="hero-overlay bg-opacity-50 rounded-md bg-neutral"></div>
+        <div className="relative sm:absolute sm:left-1/2 sm:-translate-x-full hero-content text-center text-neutral-content">
           <div className="max-w-full">
-            <h2 className="heading w-full text-white text-left tracking-wide text-base md:text-2xl">
+            <h2 className="heading w-full text-white text-left tracking-wide text-base md:text-xl lg:text-2xl">
               Reach for the stars
             </h2>
             {/* <div className="h-8" /> */}
-            <h1 className="heading w-full text-white text-left tracking-wide text-4xl md:text-7xl">
+            <h1 className="heading w-full text-white text-left tracking-wide text-4xl md:text-5xl lg:text-7xl">
               Travel with
               <br />
               <span className="text-accent uppercase">Cosmogo</span>
