@@ -7,15 +7,16 @@ import Cart from "components/Cart";
 import Error from "components/Error";
 import Suit from "components/Suit";
 import type { Dragon } from "types/spaceXTypes";
+import { useGetDragonsQuery } from "types/appTypes";
+import Spinner from "components/Spinner";
 
-interface LocalProps {
-  dragons: Dragon[];
-  error: boolean;
-}
-
-const CartPage: NextPage<LocalProps> = ({ dragons, error }) => {
-  if (error) {
+const CartPage = () => {
+  const dragons = useGetDragonsQuery();
+  if (dragons.error) {
     return <Error />;
+  }
+  if (dragons.loading) {
+    return <Spinner />;
   }
 
   return (
@@ -24,54 +25,10 @@ const CartPage: NextPage<LocalProps> = ({ dragons, error }) => {
       <Suit />
       <div className="h-8 sm:h-4" />
       <div className="flex h-full w-full items-center justify-center">
-        <Cart dragons={dragons} />
+        {dragons.data ? <Cart dragons={dragons.data?.dragons} /> : null}
       </div>
     </>
   );
-};
-
-export const getStaticProps: GetStaticProps<LocalProps> = async () => {
-  const client = getClient();
-
-  try {
-    const { data } = await client.query<LocalProps>({
-      query: gql`
-        query GetLaunches {
-          dragons {
-            crew_capacity
-            description
-            name
-            id
-          }
-        }
-      `,
-    });
-
-    return {
-      props: {
-        dragons: data.dragons.map((d) => {
-          if (!d.crew_capacity) {
-            return { ...d, crew_capacity: 3 };
-          }
-
-          return d;
-        }),
-        error: false,
-      },
-    };
-  } catch (e) {
-    console.error(e);
-    return {
-      props: {
-        dragons: [],
-        error: true,
-      },
-    };
-  }
-};
-
-export const getStaticPaths = () => {
-  return { paths: [], fallback: "blocking" };
 };
 
 export default CartPage;

@@ -5,8 +5,14 @@ import type { GetStaticProps, NextPage } from "next";
 import LaunchList, { INITIAL_FILTERS } from "components/LaunchList";
 import { getClient } from "lib/apollo.client";
 import Error from "components/Error";
-import type { Dragon, Launch } from "types/appTypes";
+import {
+  Dragon,
+  Launch,
+  useGetDragonsQuery,
+  useGetLaunchesQuery,
+} from "types/appTypes";
 import { dragonData, launchData, PAGINATE_BY } from "graphql/spaceX";
+import Spinner from "components/Spinner";
 
 interface LocalProps {
   launches: Launch[];
@@ -18,7 +24,17 @@ const BG_IMG =
   "https://images.unsplash.com/photo-1581293963396-4d8804f556c2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80";
 
 const HomePage: NextPage<LocalProps> = (props) => {
-  const { launches, dragons, error } = props;
+  // const { launches, dragons, error } = props;
+  const launches = useGetLaunchesQuery({
+    variables: {
+      take: PAGINATE_BY,
+      offset: 0,
+      orderDirection: INITIAL_FILTERS.order,
+      orderBy: INITIAL_FILTERS.sort,
+    },
+  });
+
+  const dragons = useGetDragonsQuery();
 
   return (
     <>
@@ -43,63 +59,24 @@ const HomePage: NextPage<LocalProps> = (props) => {
       </header>
 
       <main className="w-full">
-        {error ? (
+        {launches.loading || dragons.loading ? (
+          <div className="w-full flex justify-center">
+            <Spinner />
+          </div>
+        ) : launches.error ||
+          dragons.error ||
+          !dragons.data ||
+          !launches.data ? (
           <Error />
         ) : (
-          <LaunchList dragons={dragons} initialLaunches={launches} />
+          <LaunchList
+            dragons={dragons.data.dragons}
+            initialLaunches={launches.data.launches}
+          />
         )}
       </main>
     </>
   );
-};
-
-export const getStaticProps: GetStaticProps<LocalProps> = async () => {
-  const client = getClient();
-
-  try {
-    const { data } = await client.query<{
-      launches: Launch[];
-      dragons: Dragon[];
-    }>({
-      query: gql`
-        query GetLaunches {
-          launches(take: ${PAGINATE_BY}, skip: 0, orderDirection: "${INITIAL_FILTERS.order}", orderBy: "${INITIAL_FILTERS.sort}") {
-            ${launchData}
-          }
-          dragons {
-            ${dragonData}
-          }
-        }
-      `,
-    });
-
-    return {
-      props: {
-        launches: data.launches,
-        dragons: data.dragons.map((d) => {
-          if (!d.crew_capacity) {
-            return { ...d, crew_capacity: 3 };
-          }
-
-          return d;
-        }),
-        error: false,
-      },
-    };
-  } catch (e) {
-    console.error(e);
-    return {
-      props: {
-        dragons: [],
-        launches: [],
-        error: true,
-      },
-    };
-  }
-};
-
-export const getStaticPaths = () => {
-  return { paths: [], fallback: "blocking" };
 };
 
 export default HomePage;

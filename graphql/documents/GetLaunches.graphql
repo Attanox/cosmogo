@@ -1,0 +1,26 @@
+query GetLaunches(
+  $take: Int
+  $offset: Int
+  $orderBy: String
+  $orderDirection: String
+) {
+  launches(
+    take: $take
+    skip: $offset
+    orderBy: $orderBy
+    orderDirection: $orderDirection
+  ) {
+    id
+    mission_name
+    launch_date_utc
+    rocket {
+      rocket_type
+    }
+    launch_site {
+      site_name_long
+    }
+    links {
+      article_link
+    }
+  }
+}

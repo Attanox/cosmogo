@@ -1,0 +1,8 @@
+query GetDragons {
+  dragons {
+    crew_capacity
+    description
+    name
+    id
+  }
+}

@@ -6,10 +6,10 @@ const prisma = new PrismaClient();
 async function seed() {
   try {
     await prisma.dragon.deleteMany();
+    await prisma.launch.deleteMany();
     await prisma.rocket.deleteMany();
     await prisma.launchSite.deleteMany();
     await prisma.launchLinks.deleteMany();
-    await prisma.launch.deleteMany();
 
     // Seed Rockets
     const falcon9 = await prisma.rocket.create({
@@ -73,7 +73,7 @@ async function seed() {
     const cargoDragon = await prisma.dragon.create({
       data: {
         id: "cargo_dragon",
-        crew_capacity: 0,
+        crew_capacity: 3,
         description:
           "Dragon is a spacecraft developed by SpaceX for transporting cargo and eventually astronauts to the International Space Station (ISS).",
         name: "Dragon",

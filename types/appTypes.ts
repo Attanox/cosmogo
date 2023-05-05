@@ -228,6 +228,21 @@ export type GetCartQueryVariables = Exact<{
 
 export type GetCartQuery = { __typename?: 'Query', cart?: { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, details?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }>, suit?: { __typename?: 'Suit', id: string, baseColor: string, detailsColor: string } | null } | null };
 
+export type GetDragonsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetDragonsQuery = { __typename?: 'Query', dragons: Array<{ __typename?: 'Dragon', crew_capacity: number, description?: string | null, name: string, id: string }> };
+
+export type GetLaunchesQueryVariables = Exact<{
+  take: Scalars['Int'];
+  offset: Scalars['Int'];
+  orderBy?: InputMaybe<Scalars['String']>;
+  orderDirection?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetLaunchesQuery = { __typename?: 'Query', launches: Array<{ __typename?: 'Launch', id: string, mission_name: string, launch_date_utc: string, rocket: { __typename?: 'Rocket', rocket_type: string }, launch_site: { __typename?: 'LaunchSite', site_name_long: string }, links?: { __typename?: 'LaunchLinks', article_link?: string | null } | null }> };
+
 export type RemoveFromCartMutationVariables = Exact<{
   input: RemoveFromCartInput;
 }>;
@@ -622,6 +637,97 @@ export function useGetCartLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetCartQueryHookResult = ReturnType<typeof useGetCartQuery>;
 export type GetCartLazyQueryHookResult = ReturnType<typeof useGetCartLazyQuery>;
 export type GetCartQueryResult = Apollo.QueryResult<GetCartQuery, GetCartQueryVariables>;
+export const GetDragonsDocument = gql`
+    query GetDragons {
+  dragons {
+    crew_capacity
+    description
+    name
+    id
+  }
+}
+    `;
+
+/**
+ * __useGetDragonsQuery__
+ *
+ * To run a query within a React component, call `useGetDragonsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDragonsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDragonsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetDragonsQuery(baseOptions?: Apollo.QueryHookOptions<GetDragonsQuery, GetDragonsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDragonsQuery, GetDragonsQueryVariables>(GetDragonsDocument, options);
+      }
+export function useGetDragonsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDragonsQuery, GetDragonsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDragonsQuery, GetDragonsQueryVariables>(GetDragonsDocument, options);
+        }
+export type GetDragonsQueryHookResult = ReturnType<typeof useGetDragonsQuery>;
+export type GetDragonsLazyQueryHookResult = ReturnType<typeof useGetDragonsLazyQuery>;
+export type GetDragonsQueryResult = Apollo.QueryResult<GetDragonsQuery, GetDragonsQueryVariables>;
+export const GetLaunchesDocument = gql`
+    query GetLaunches($take: Int!, $offset: Int!, $orderBy: String, $orderDirection: String) {
+  launches(
+    take: $take
+    skip: $offset
+    orderBy: $orderBy
+    orderDirection: $orderDirection
+  ) {
+    id
+    mission_name
+    launch_date_utc
+    rocket {
+      rocket_type
+    }
+    launch_site {
+      site_name_long
+    }
+    links {
+      article_link
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetLaunchesQuery__
+ *
+ * To run a query within a React component, call `useGetLaunchesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLaunchesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLaunchesQuery({
+ *   variables: {
+ *      take: // value for 'take'
+ *      offset: // value for 'offset'
+ *      orderBy: // value for 'orderBy'
+ *      orderDirection: // value for 'orderDirection'
+ *   },
+ * });
+ */
+export function useGetLaunchesQuery(baseOptions: Apollo.QueryHookOptions<GetLaunchesQuery, GetLaunchesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetLaunchesQuery, GetLaunchesQueryVariables>(GetLaunchesDocument, options);
+      }
+export function useGetLaunchesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLaunchesQuery, GetLaunchesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetLaunchesQuery, GetLaunchesQueryVariables>(GetLaunchesDocument, options);
+        }
+export type GetLaunchesQueryHookResult = ReturnType<typeof useGetLaunchesQuery>;
+export type GetLaunchesLazyQueryHookResult = ReturnType<typeof useGetLaunchesLazyQuery>;
+export type GetLaunchesQueryResult = Apollo.QueryResult<GetLaunchesQuery, GetLaunchesQueryVariables>;
 export const RemoveFromCartDocument = gql`
     mutation RemoveFromCart($input: RemoveFromCartInput!) {
   removeItem(input: $input) {
