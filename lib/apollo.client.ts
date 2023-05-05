@@ -26,7 +26,6 @@ export const useClient = () => {
 };
 
 export const getClient = () => {
-  console.log("origin", origin);
   return new ApolloClient({
     uri: `${origin}/api`,
     cache: new InMemoryCache(),

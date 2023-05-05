@@ -98,4 +98,8 @@ export const getStaticProps: GetStaticProps<LocalProps> = async () => {
   }
 };
 
+export const getStaticPaths = () => {
+  return { paths: [], fallback: "blocking" };
+};
+
 export default HomePage;
