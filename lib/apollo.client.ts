@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 const protocol = `${
   process.env.NODE_ENV === "development" ? "http" : "https"
@@ -25,13 +25,10 @@ export const useClient = () => {
   return client;
 };
 
-const link = new HttpLink({
-  uri: `${origin}/api`,
-});
-
 export const getClient = () => {
+  console.log("origin", origin);
   return new ApolloClient({
-    link,
+    uri: `${origin}/api`,
     cache: new InMemoryCache(),
   });
 };
