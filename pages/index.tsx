@@ -3,9 +3,9 @@ import { gql } from "@apollo/client";
 import type { GetStaticProps, NextPage } from "next";
 
 import LaunchList, { INITIAL_FILTERS } from "components/LaunchList";
-import { getSpacexClient } from "lib/apollo.client";
+import { getClient } from "lib/apollo.client";
 import Error from "components/Error";
-import type { Dragon, Launch } from "types/spaceXTypes";
+import type { Dragon, Launch } from "types/appTypes";
 import { dragonData, launchData, PAGINATE_BY } from "graphql/spaceX";
 
 interface LocalProps {
@@ -54,7 +54,7 @@ const HomePage: NextPage<LocalProps> = (props) => {
 };
 
 export const getStaticProps: GetStaticProps<LocalProps> = async () => {
-  const client = getSpacexClient();
+  const client = getClient();
 
   try {
     const { data } = await client.query<{
@@ -63,7 +63,7 @@ export const getStaticProps: GetStaticProps<LocalProps> = async () => {
     }>({
       query: gql`
         query GetLaunches {
-          launches(limit: ${PAGINATE_BY}, offset: 0, order: "${INITIAL_FILTERS.order}", sort: "${INITIAL_FILTERS.sort}") {
+          launches(take: ${PAGINATE_BY}, skip: 0, orderDirection: "${INITIAL_FILTERS.order}", orderBy: "${INITIAL_FILTERS.sort}") {
             ${launchData}
           }
           dragons {

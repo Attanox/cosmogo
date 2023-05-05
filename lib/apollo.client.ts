@@ -26,10 +26,10 @@ export const useClient = () => {
 };
 
 const link = new HttpLink({
-  uri: "https://api.spacex.land/graphql/",
+  uri: `${origin}/api`,
 });
 
-export const getSpacexClient = () => {
+export const getClient = () => {
   return new ApolloClient({
     link,
     cache: new InMemoryCache(),

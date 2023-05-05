@@ -11,6 +11,43 @@ const resolvers: Resolvers = {
       const cart = await findOrCreateCart(prisma, id);
       return cart;
     },
+    launches: async (_, args, { prisma }) => {
+      const {
+        orderBy = "launch_date_utc",
+        orderDirection = "desc",
+        skip = 0,
+        take = 10,
+      } = args;
+
+      let orderByConfig: { [x: string]: string | { [y: string]: string } } = {
+        [orderBy]: orderDirection,
+      };
+
+      if (orderBy === "site_name_long") {
+        orderByConfig = {
+          launch_site: {
+            site_name_long: orderDirection,
+          },
+        };
+      }
+
+      const launches = await prisma.launch.findMany({
+        include: {
+          rocket: true,
+          launch_site: true,
+          links: true,
+        },
+        orderBy: orderByConfig,
+        skip,
+        take,
+      });
+
+      return launches;
+    },
+    dragons: async (_, _args, { prisma }) => {
+      const dragons = await prisma.dragon.findMany();
+      return dragons;
+    },
   },
   Mutation: {
     addItem: async (_, { input }, { prisma }) => {

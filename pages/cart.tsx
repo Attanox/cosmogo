@@ -2,7 +2,7 @@ import React from "react";
 import { gql } from "@apollo/client";
 import { type GetStaticProps, type NextPage } from "next";
 
-import { getSpacexClient } from "lib/apollo.client";
+import { getClient } from "lib/apollo.client";
 import Cart from "components/Cart";
 import Error from "components/Error";
 import Suit from "components/Suit";
@@ -31,7 +31,7 @@ const CartPage: NextPage<LocalProps> = ({ dragons, error }) => {
 };
 
 export const getStaticProps: GetStaticProps<LocalProps> = async () => {
-  const client = getSpacexClient();
+  const client = getClient();
 
   try {
     const { data } = await client.query<LocalProps>({

@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { Dragon, Launch } from "types/spaceXTypes";
+import type { Dragon, Launch } from "types/appTypes";
 import type { Display, Filters } from "./types";
 import OrderSelect from "./OrderSelect";
 import LayoutSelect from "./LayoutSelect";
@@ -13,7 +13,7 @@ interface LocalProps {
 }
 
 export const INITIAL_FILTERS = {
-  sort: "mission_name",
+  sort: "launch_date_utc",
   order: "asc",
 } as Filters;
 
@@ -45,7 +45,7 @@ const LaunchList = (props: LocalProps) => {
           display === "grid"
             ? {
                 display: "grid",
-                gridTemplateColumns: "repeat( auto-fit, minmax(250px, 1fr) )",
+                gridTemplateColumns: "repeat( 3, 1fr )",
               }
             : { display: "flex", flexDirection: "column" }
         }

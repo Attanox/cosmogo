@@ -1,10 +1,11 @@
 import React from "react";
 import {
+  Dragon,
+  Launch,
   GetCartDocument,
   useAddToCartMutation,
   useGetCartQuery,
 } from "types/appTypes";
-import type { Dragon, Launch } from "types/spaceXTypes";
 
 const AddToCart = (props: {
   cartId: string;
@@ -46,7 +47,7 @@ const AddToCart = (props: {
                 cartId,
                 id: launch.id as string,
                 name: launch.mission_name as string,
-                details: launch.details,
+                details: "",
                 capsule: {
                   crew_capacity: dragons[0].crew_capacity as number,
                   description: dragons[0].description as string,

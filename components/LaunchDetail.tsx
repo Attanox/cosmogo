@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { useCartId } from "hooks/cart.hooks";
 import AddToCart from "./AddToCart";
-import type { Dragon, Launch } from "types/spaceXTypes";
+import type { Dragon, Launch } from "types/appTypes";
 
 const getSrc = (id: string) => {
   const IMGS = [
@@ -18,6 +18,11 @@ const getSrc = (id: string) => {
   const index = (id?.charCodeAt(id.length - 1) || 0) % IMGS.length;
   return IMGS[index];
 };
+
+function isoToDate(isoString: string) {
+  const date = new Date(isoString);
+  return date.toLocaleDateString("en-US");
+}
 
 const LaunchDetail = (props: {
   launch: Launch;
@@ -46,24 +51,19 @@ const LaunchDetail = (props: {
             <AddToCart cartId={cartId} launch={launch} dragons={dragons} />
           ) : null}
         </div>
-        <p className="block mt-auto">
-          Launching with rocket of type{" "}
+        <p className="font-light text-sm block mt-auto">
+          Launching{" "}
           <span className="font-bold text-lg">
-            {launch.rocket?.rocket_type}
+            {isoToDate(launch.launch_date_utc)}
           </span>
         </p>
-        <div>
+        <p className="font-light text-sm block mt-auto">
           Launching from{" "}
           <span className="font-bold text-lg">
             {launch?.launch_site?.site_name_long}
           </span>
-        </div>
-        <p>
-          Additional info can be found{" "}
-          <a className="link" href={String(launch.links?.article_link || "")}>
-            here
-          </a>
         </p>
+
         <div className="card-actions justify-end">
           {display === "grid" ? (
             <AddToCart cartId={cartId} launch={launch} dragons={dragons} />

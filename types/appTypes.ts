@@ -66,8 +66,8 @@ export type DeleteCartInput = {
 export type Dragon = {
   __typename?: 'Dragon';
   crew_capacity: Scalars['Int'];
-  description: Scalars['String'];
-  id: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
   name: Scalars['String'];
 };
 
@@ -81,6 +81,26 @@ export type DragonInput = {
 export type IncreaseCartItemInput = {
   cartId: Scalars['ID'];
   id: Scalars['ID'];
+};
+
+export type Launch = {
+  __typename?: 'Launch';
+  id: Scalars['ID'];
+  launch_date_utc: Scalars['String'];
+  launch_site: LaunchSite;
+  links?: Maybe<LaunchLinks>;
+  mission_name: Scalars['String'];
+  rocket: Rocket;
+};
+
+export type LaunchLinks = {
+  __typename?: 'LaunchLinks';
+  article_link?: Maybe<Scalars['String']>;
+};
+
+export type LaunchSite = {
+  __typename?: 'LaunchSite';
+  site_name_long: Scalars['String'];
 };
 
 export type Money = {
@@ -138,6 +158,8 @@ export type MutationUpdateCartItemArgs = {
 export type Query = {
   __typename?: 'Query';
   cart?: Maybe<Cart>;
+  dragons: Array<Dragon>;
+  launches: Array<Launch>;
 };
 
 
@@ -145,9 +167,22 @@ export type QueryCartArgs = {
   id: Scalars['ID'];
 };
 
+
+export type QueryLaunchesArgs = {
+  orderBy?: InputMaybe<Scalars['String']>;
+  orderDirection?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
 export type RemoveFromCartInput = {
   cartId: Scalars['ID'];
   id: Scalars['ID'];
+};
+
+export type Rocket = {
+  __typename?: 'Rocket';
+  rocket_type: Scalars['String'];
 };
 
 export type Suit = {
@@ -288,10 +323,14 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   IncreaseCartItemInput: IncreaseCartItemInput;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  Launch: ResolverTypeWrapper<Launch>;
+  LaunchLinks: ResolverTypeWrapper<LaunchLinks>;
+  LaunchSite: ResolverTypeWrapper<LaunchSite>;
   Money: ResolverTypeWrapper<Money>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   RemoveFromCartInput: RemoveFromCartInput;
+  Rocket: ResolverTypeWrapper<Rocket>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Suit: ResolverTypeWrapper<SuitModel>;
   UpdateCartItemInput: UpdateCartItemInput;
@@ -311,10 +350,14 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'];
   IncreaseCartItemInput: IncreaseCartItemInput;
   Int: Scalars['Int'];
+  Launch: Launch;
+  LaunchLinks: LaunchLinks;
+  LaunchSite: LaunchSite;
   Money: Money;
   Mutation: {};
   Query: {};
   RemoveFromCartInput: RemoveFromCartInput;
+  Rocket: Rocket;
   String: Scalars['String'];
   Suit: SuitModel;
   UpdateCartItemInput: UpdateCartItemInput;
@@ -342,9 +385,29 @@ export type CartItemResolvers<ContextType = GraphQLContext, ParentType extends R
 
 export type DragonResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Dragon'] = ResolversParentTypes['Dragon']> = {
   crew_capacity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LaunchResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Launch'] = ResolversParentTypes['Launch']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  launch_date_utc?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  launch_site?: Resolver<ResolversTypes['LaunchSite'], ParentType, ContextType>;
+  links?: Resolver<Maybe<ResolversTypes['LaunchLinks']>, ParentType, ContextType>;
+  mission_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  rocket?: Resolver<ResolversTypes['Rocket'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LaunchLinksResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['LaunchLinks'] = ResolversParentTypes['LaunchLinks']> = {
+  article_link?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LaunchSiteResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['LaunchSite'] = ResolversParentTypes['LaunchSite']> = {
+  site_name_long?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -366,6 +429,13 @@ export type MutationResolvers<ContextType = GraphQLContext, ParentType extends R
 
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   cart?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<QueryCartArgs, 'id'>>;
+  dragons?: Resolver<Array<ResolversTypes['Dragon']>, ParentType, ContextType>;
+  launches?: Resolver<Array<ResolversTypes['Launch']>, ParentType, ContextType, RequireFields<QueryLaunchesArgs, 'orderBy' | 'orderDirection' | 'skip' | 'take'>>;
+};
+
+export type RocketResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Rocket'] = ResolversParentTypes['Rocket']> = {
+  rocket_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type SuitResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Suit'] = ResolversParentTypes['Suit']> = {
@@ -379,9 +449,13 @@ export type Resolvers<ContextType = GraphQLContext> = {
   Cart?: CartResolvers<ContextType>;
   CartItem?: CartItemResolvers<ContextType>;
   Dragon?: DragonResolvers<ContextType>;
+  Launch?: LaunchResolvers<ContextType>;
+  LaunchLinks?: LaunchLinksResolvers<ContextType>;
+  LaunchSite?: LaunchSiteResolvers<ContextType>;
   Money?: MoneyResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Rocket?: RocketResolvers<ContextType>;
   Suit?: SuitResolvers<ContextType>;
 };
 

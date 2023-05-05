@@ -1,6 +1,7 @@
 const launchData = `
   id
   mission_name
+  launch_date_utc
   rocket {
     rocket_type
   }

@@ -1,5 +1,40 @@
 type Query {
   cart(id: ID!): Cart
+  launches(
+    orderBy: String = "launch_date_utc"
+    orderDirection: String = "desc"
+    skip: Int = 0
+    take: Int = 10
+  ): [Launch!]!
+  dragons: [Dragon!]!
+}
+
+type Launch {
+  id: ID!
+  mission_name: String!
+  launch_date_utc: String!
+  rocket: Rocket!
+  launch_site: LaunchSite!
+  links: LaunchLinks
+}
+
+type Rocket {
+  rocket_type: String!
+}
+
+type LaunchSite {
+  site_name_long: String!
+}
+
+type LaunchLinks {
+  article_link: String
+}
+
+type Dragon {
+  id: ID!
+  crew_capacity: Int!
+  description: String
+  name: String!
 }
 
 type Cart {
@@ -79,13 +114,6 @@ input ChangeSuitInput {
   cartId: ID!
   baseColor: String
   detailsColor: String
-}
-
-type Dragon {
-  crew_capacity: Int!
-  description: String!
-  name: String!
-  id: String!
 }
 
 input DragonInput {

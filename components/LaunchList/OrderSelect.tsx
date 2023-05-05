@@ -1,8 +1,8 @@
 import React from "react";
 import { gql } from "@apollo/client";
 import { launchData, PAGINATE_BY } from "graphql/spaceX";
-import { getSpacexClient } from "lib/apollo.client";
-import { Launch } from "types/spaceXTypes";
+import { getClient } from "lib/apollo.client";
+import { Launch } from "types/appTypes";
 import type { Filters, Order, Sort } from "./types";
 
 interface LocalProps {
@@ -22,7 +22,7 @@ const processFilter = (filter: string) => {
 
 const OrderSelect = (props: LocalProps) => {
   const { setLaunches, initialFilters, setFilters } = props;
-  const client = getSpacexClient();
+  const client = getClient();
   const [loading, setLoading] = React.useState(false);
 
   const orderLaunches = async (order: Order, sort: Sort) => {
@@ -32,7 +32,7 @@ const OrderSelect = (props: LocalProps) => {
     }>({
       query: gql`
         query GetLaunches {
-          launches(limit: ${PAGINATE_BY}, offset: 0, order: "${order}", sort: "${sort}") {
+          launches(take: ${PAGINATE_BY}, skip: 0, orderDirection: "${order}", orderBy: "${sort}") {
             ${launchData}
           }
         }
@@ -61,6 +61,12 @@ const OrderSelect = (props: LocalProps) => {
           className="w-full select select-bordered select-info"
           defaultValue={`${initialFilters.sort}${SEPARATOR}${initialFilters.order}`}
         >
+          <option value={`launch_date_utc${SEPARATOR}asc`}>
+            Launch Date ascending
+          </option>
+          <option value={`launch_date_utc${SEPARATOR}desc`}>
+            Launch Date descending
+          </option>
           <option value={`mission_name${SEPARATOR}asc`}>
             Mission name ascending
           </option>

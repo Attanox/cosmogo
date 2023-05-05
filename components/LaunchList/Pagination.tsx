@@ -1,6 +1,6 @@
 import React from "react";
-import { getSpacexClient } from "lib/apollo.client";
-import { Launch } from "types/spaceXTypes";
+import { getClient } from "lib/apollo.client";
+import { Launch } from "types/appTypes";
 import { launchData, PAGINATE_BY } from "graphql/spaceX";
 import { gql } from "@apollo/client";
 import { Filters } from "./types";
@@ -9,7 +9,7 @@ const usePagination = (
   setLaunches: (launches: Launch[]) => void,
   filters: Filters
 ) => {
-  const client = getSpacexClient();
+  const client = getClient();
 
   const [offset, setOffset] = React.useState(0);
   const [gettingLaunches, setGettingLaunches] = React.useState(false);
@@ -20,7 +20,7 @@ const usePagination = (
     }>({
       query: gql`
         query GetLaunches {
-          launches(limit: ${PAGINATE_BY}, offset: ${offset}, order: "${filters.order}", sort: "${filters.sort}") {
+          launches(take: ${PAGINATE_BY}, skip: ${offset}, orderDirection: "${filters.order}", orderBy: "${filters.sort}") {
             ${launchData}
           }
         }

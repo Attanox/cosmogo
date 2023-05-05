@@ -46,3 +46,44 @@ model Suit {
 
   @@id([id, cartId])
 }
+
+model Rocket {
+  id          String   @id @default(uuid())
+  rocket_type String
+  // # ... add other rocket fields as needed
+  Launch      Launch[]
+}
+
+model Launch {
+  id              String       @id @default(uuid())
+  mission_name    String
+  launch_date_utc String
+  rocket          Rocket       @relation(fields: [rocket_id], references: [id])
+  rocket_id       String
+  launch_site     LaunchSite   @relation(fields: [launch_site_id], references: [id])
+  launch_site_id  String
+  links           LaunchLinks? @relation(fields: [launchLinksId], references: [id])
+  launchLinksId   String?
+}
+
+model LaunchSite {
+  id             String   @id @default(uuid())
+  site_name_long String
+  // # ... add other launch site fields as needed
+  Launch         Launch[]
+}
+
+model LaunchLinks {
+  id           String   @id @default(uuid())
+  article_link String
+  // # ... add other launch links fields as needed
+  Launch       Launch[]
+}
+
+model Dragon {
+  id            String  @id
+  crew_capacity Int
+  description   String?
+  name          String
+  // # ... add other Dragon fields as needed
+}
