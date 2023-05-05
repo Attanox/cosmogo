@@ -60,7 +60,7 @@ const HomePage: NextPage<LocalProps> = (props) => {
 
       <main className="w-full">
         {launches.loading || dragons.loading ? (
-          <div className="w-full flex justify-center">
+          <div className="mt-4 w-full flex justify-center">
             <Spinner />
           </div>
         ) : launches.error ||
